@@ -286,6 +286,16 @@ z-index:20;font-family:inherit;
 }
 #s-session{height:100vh;height:100dvh;}
 .quad-grid{min-height:0;}
+/* Force-hide all WebGazer injected elements */
+#webgazerVideoContainer,
+#webgazerVideoFeed,
+#webgazerFaceOverlay,
+#webgazerFaceFeedbackBox,
+canvas#webgazerVideoCanvas,
+video#webgazerVideoFeed {
+  display: none !important;
+  visibility: hidden !important;
+}
 </style>
 
 </head>
@@ -708,6 +718,11 @@ async function startCalibration(fromWizard){
       ]);
 
       console.log('WebGazer ready');
+      // Belt-and-suspenders: hide any DOM elements WebGazer injected
+document.querySelectorAll('[id^="webgazer"]').forEach(el=>{
+  el.style.display='none';
+  el.style.visibility='hidden';
+});
     }catch(e){
       console.warn('WebGazer init:', e.message);
       document.getElementById('cal-sub').textContent=
