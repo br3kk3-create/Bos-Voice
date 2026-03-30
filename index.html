@@ -700,38 +700,7 @@ async function startCalibration(fromWizard){
   // Try to initialise WebGazer with an 8-second safety timeout.
   // On iOS Safari, TF.js can hang silently and black-screen the app.
   // The race ensures we always recover gracefully.
-  if(window.webgazer){
-    try{
-      webgazer
-        .setRegression('ridge')
-        .setTracker('TFFacemesh')
-        .saveDataAcrossSessions(true)
-        .setGazeListener(onGaze)
-        .showVideoPreview(false)
-        .showPredictionPoints(false);
-      webgazer.params.showFaceOverlay=false;
-      webgazer.params.showFaceFeedbackBox=false;
 
-      await Promise.race([
-        webgazer.begin(),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
-      ]);
-
-      console.log('WebGazer ready');
-      // Belt-and-suspenders: hide any DOM elements WebGazer injected
-document.querySelectorAll('[id^="webgazer"]').forEach(el=>{
-  el.style.display='none';
-  el.style.visibility='hidden';
-});
-    }catch(e){
-      console.warn('WebGazer init:', e.message);
-      document.getElementById('cal-sub').textContent=
-        e.message==='timeout'
-          ? 'Eye tracker timed out (common on iPhone/iPad). Tap "Skip" to use touch mode, or try Chrome on Android for full eye tracking.'
-          : 'Eye tracker could not start. Tap "Skip" to use touch-only mode.';
-    }
-  }
-}
 
 function renderCalDots(currentIdx){
   document.getElementById('cal-prog-dots').innerHTML=CAL_POINTS.map((_,i)=>`<div class="cal-prog-dot ${i<currentIdx?'done':i===currentIdx?'cur':''}"></div>`).join('');
@@ -739,9 +708,36 @@ function renderCalDots(currentIdx){
 
 async function calAction(){
   if(!calActive){
-    calActive=true; calPointIdx=0;
+    calActive=true;
+    calPointIdx=0;
     document.getElementById('cal-overlay').style.pointerEvents='none';
     document.getElementById('cal-overlay').style.opacity='0';
+
+    // Start WebGazer only when user clicks Start — not on screen load
+    if(window.webgazer){
+      try{
+        webgazer
+          .setRegression('ridge')
+          .setTracker('TFFacemesh')
+          .saveDataAcrossSessions(false)
+          .setGazeListener(onGaze)
+          .showVideoPreview(false)
+          .showPredictionPoints(false);
+        webgazer.params.showFaceOverlay     = false;
+        webgazer.params.showFaceFeedbackBox = false;
+        await Promise.race([
+          webgazer.begin(),
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+        ]);
+        document.querySelectorAll('[id^="webgazer"]').forEach(el=>{
+          el.style.display='none';
+          el.style.visibility='hidden';
+        });
+      }catch(e){
+        console.warn('WebGazer error:',e.message);
+      }
+    }
+
     showCalTarget(0);
   }
 }
