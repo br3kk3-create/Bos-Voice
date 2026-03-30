@@ -682,6 +682,8 @@ function wizBack(){
 async function startCalibration(fromWizard){
   calActive=false; calPointIdx=0; calClicks=0;
   show('s-calibrate');
+  // Force screen to render before WebGazer loads
+await new Promise(r=>setTimeout(r,100));
   document.getElementById('cal-instruction').textContent='Allow camera access when prompted, then position the device so the face is clearly visible below.';
   document.getElementById('cal-sub').textContent='Good front lighting gives the best accuracy.';
   document.getElementById('cal-action-btn').textContent='Start calibration';
@@ -728,7 +730,10 @@ async function startCalibration(fromWizard){
       webgazer.params.showFaceOverlay    = false;
       webgazer.params.showFaceFeedbackBox = false;
 
-      await webgazer.begin();
+      await Promise.race([
+  webgazer.begin(),
+  new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+]);
 
       // After starting, tell WebGazer to weight the eye-region landmarks
       // more heavily than outer face landmarks. This further de-emphasizes
