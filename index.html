@@ -10,7 +10,6 @@
 <meta name="apple-mobile-web-app-title" content="Bo's Voice">
 <meta name="theme-color" content="#0f0f1a">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -585,7 +584,11 @@ function calAction(){
   calActive=true;calPointIdx=0;
   document.getElementById('cal-overlay').style.pointerEvents='none';
   document.getElementById('cal-overlay').style.opacity='0';
-  if(window.webgazer){
+
+  // Load WebGazer dynamically only when user clicks Start
+  var script=document.createElement('script');
+  script.src='https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js';
+  script.onload=function(){
     try{
       webgazer.setRegression('ridge').setTracker('TFFacemesh').saveDataAcrossSessions(false).setGazeListener(onGaze).showVideoPreview(false).showPredictionPoints(false);
       webgazer.params.showFaceOverlay=false;
@@ -595,7 +598,10 @@ function calAction(){
         console.log('WebGazer ready');
       }).catch(function(e){console.warn('WebGazer error:',e);});
     }catch(e){console.warn('WebGazer setup error:',e);}
-  }
+  };
+  script.onerror=function(){console.warn('WebGazer failed to load');};
+  document.head.appendChild(script);
+
   showCalTarget(0);
 }
 function showCalTarget(idx){
