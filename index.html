@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bo's Voice</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bo's Voice">
+<meta name="theme-color" content="#0f0f1a">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f1a;--bg2:#1a1a2e;--bg3:#16213e;--card:#1e1e35;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.18);
+  --text:#f0efe8;--text2:#a8a8c0;--text3:#58586a;
+  --teal:#1D9E75;--teal-lt:rgba(29,158,117,0.18);--teal-glow:rgba(29,158,117,0.45);
+  --amber:#f0a030;--red:#e24b4a;--radius:16px;--radius-sm:10px;
+}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;}
+.screen{display:none;position:fixed;inset:0;flex-direction:column;overflow:hidden;}
+.screen.on{display:flex;}
+.topbar{padding:14px 18px;padding-top:max(14px,env(safe-area-inset-top));background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.app-icon{width:32px;height:32px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.app-name{font-size:16px;font-weight:700;}
+.app-sub{font-size:11px;color:var(--text3);}
+.scroll-body{flex:1;overflow-y:auto;padding:20px 18px;padding-bottom:max(20px,env(safe-area-inset-bottom));}
+.btn-primary{width:100%;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+.btn-primary:hover{opacity:.88;}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+.btn-secondary{width:100%;padding:12px;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-secondary:hover{color:var(--text);}
+.icon-btn{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:16px;color:var(--text2);font-family:inherit;}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;}
+input[type=text]{width:100%;padding:10px 12px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:14px;color:var(--text);font-family:inherit;}
+input[type=text]:focus{outline:none;border-color:var(--teal);}
+
+/* LOGIN */
+#s-login{align-items:center;justify-content:center;padding:2rem;}
+.login-box{width:100%;max-width:340px;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:2rem;}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:2rem;justify-content:center;}
+.login-icon{width:52px;height:52px;background:var(--teal);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.login-title{font-size:22px;font-weight:700;}
+.login-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.login-label{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px;display:block;}
+.login-input{width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:16px;background:var(--bg2);color:var(--text);margin-bottom:14px;font-family:inherit;}
+.login-input:focus{outline:none;border-color:var(--teal);}
+.login-err{font-size:12px;color:var(--red);margin-top:8px;text-align:center;min-height:18px;}
+
+/* WIZARD */
+#s-wizard{background:var(--bg);}
+.wizard-progress{display:flex;gap:6px;padding:14px 18px 0;justify-content:center;flex-shrink:0;}
+.wp-dot{flex:1;max-width:60px;height:4px;border-radius:2px;background:var(--border2);transition:background .3s;}
+.wp-dot.done{background:var(--teal);}
+.wp-dot.cur{background:var(--amber);}
+.wizard-step{flex:1;padding:24px 18px 16px;overflow-y:auto;display:none;flex-direction:column;}
+.wizard-step.on{display:flex;}
+.wiz-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px;line-height:1.25;}
+.wiz-sub{font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.6;}
+.wiz-emoji{font-size:48px;margin-bottom:14px;}
+.wiz-footer{padding:14px 18px;padding-bottom:max(14px,env(safe-area-inset-bottom));background:var(--bg2);border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0;}
+.dwell-big{display:flex;align-items:center;justify-content:center;gap:20px;padding:20px 0;}
+.dwell-big-btn{width:56px;height:56px;background:var(--bg3);border:2px solid var(--border2);border-radius:14px;font-size:28px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.dwell-big-btn:hover{border-color:var(--teal);}
+.dwell-big-val{font-size:48px;font-weight:800;color:var(--teal);min-width:120px;text-align:center;}
+.cat-toggle-list{display:flex;flex-direction:column;gap:8px;}
+.cat-toggle-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:border-color .15s;}
+.cat-toggle-item.on{border-color:var(--teal);background:var(--teal-lt);}
+.cat-toggle-icon{font-size:24px;flex-shrink:0;}
+.cat-toggle-text{flex:1;}
+.cat-toggle-name{font-size:14px;font-weight:600;color:var(--text);}
+.cat-toggle-count{font-size:11px;color:var(--text3);margin-top:1px;}
+.cat-toggle-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s;}
+.cat-toggle-item.on .cat-toggle-check{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+/* HOME */
+#s-home{background:var(--bg);}
+.home-actions{margin-bottom:6px;}
+.action-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;width:100%;}
+.action-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;transition:all .15s;}
+.action-card:hover{border-color:var(--teal);}
+.action-card:active{transform:scale(.97);}
+.action-icon{font-size:28px;}
+.action-name{font-size:13px;font-weight:700;color:var(--text);}
+.action-sub{font-size:11px;color:var(--text3);}
+.dwell-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;margin-bottom:20px;}
+.dwell-row-label{font-size:13px;color:var(--text2);}
+.dwell-adj{display:flex;align-items:center;gap:8px;}
+.adj-btn{width:28px;height:28px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+.adj-btn:hover{border-color:var(--teal);}
+.adj-val{font-size:14px;font-weight:700;color:var(--text);min-width:40px;text-align:center;}
+.log-item{padding:9px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;}
+.log-item:last-child{border-bottom:none;}
+.log-time{font-size:11px;color:var(--text3);white-space:nowrap;margin-top:2px;flex-shrink:0;}
+.log-q{font-size:12px;color:var(--text2);}
+.log-a{font-size:14px;font-weight:700;color:var(--text);}
+.log-empty{font-size:13px;color:var(--text3);padding:16px 0;text-align:center;}
+
+/* SETTINGS */
+#s-settings{background:var(--bg);}
+.q-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.q-item{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;cursor:grab;user-select:none;}
+.q-item:active{cursor:grabbing;}
+.q-item.dragging{opacity:.4;}
+.q-item.drag-over{border-color:var(--teal);border-style:dashed;}
+.q-drag-handle{font-size:16px;color:var(--text3);flex-shrink:0;}
+.q-item-emoji{font-size:18px;flex-shrink:0;}
+.q-item-text{flex:1;min-width:0;}
+.q-item-q{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-item-answers{font-size:11px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-toggle{position:relative;width:40px;height:24px;flex-shrink:0;}
+.q-toggle input{opacity:0;width:0;height:0;}
+.q-toggle-track{position:absolute;inset:0;background:var(--bg3);border-radius:12px;border:1px solid var(--border2);transition:background .2s;cursor:pointer;}
+.q-toggle input:checked+.q-toggle-track{background:var(--teal);border-color:var(--teal);}
+.q-toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none;}
+.q-toggle input:checked~.q-toggle-thumb{transform:translateX(16px);}
+.q-delete-btn{font-size:18px;color:var(--text3);background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:4px;font-family:inherit;flex-shrink:0;}
+.q-delete-btn:hover{color:var(--red);}
+.add-q-form{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;}
+.add-q-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;}
+.form-field{margin-bottom:12px;}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;display:block;}
+.answer-list{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
+.answer-row{display:flex;align-items:center;gap:8px;}
+.emoji-pick-btn{width:40px;height:40px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;}
+.emoji-pick-btn:hover{border-color:var(--teal);}
+.ans-text-input{flex:1;padding:9px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;color:var(--text);font-family:inherit;}
+.ans-text-input:focus{outline:none;border-color:var(--teal);}
+.ans-remove{width:28px;height:28px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:6px;font-family:inherit;}
+.ans-remove:hover{color:var(--red);}
+.add-ans-btn{padding:8px 14px;background:transparent;border:1px dashed var(--border2);border-radius:var(--radius-sm);color:var(--text3);font-size:13px;cursor:pointer;width:100%;font-family:inherit;}
+.add-ans-btn:hover{border-color:var(--teal);color:var(--teal);}
+
+/* EMOJI POPUP */
+.emoji-popup{position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:10px;z-index:300;box-shadow:0 8px 32px rgba(0,0,0,.5);display:none;flex-wrap:wrap;gap:4px;max-width:280px;}
+.emoji-popup.on{display:flex;}
+.ep-emoji{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;border-radius:7px;}
+.ep-emoji:hover{background:var(--bg3);}
+.ep-none{font-size:12px;color:var(--text3);padding:4px 8px;cursor:pointer;border-radius:7px;border:1px solid var(--border2);}
+.ep-none:hover{color:var(--text);}
+
+/* SESSION */
+#s-session{background:var(--bg);}
+.sess-top{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sess-title{font-size:15px;font-weight:700;flex:1;}
+.prog-wrap{display:flex;align-items:center;gap:6px;}
+.prog-dots{display:flex;gap:4px;}
+.pdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.1);}
+.pdot.done{background:var(--teal);}
+.pdot.cur{background:var(--amber);}
+.prog-lbl{font-size:11px;color:var(--text3);}
+.cam-pill{display:flex;align-items:center;gap:6px;border-radius:20px;padding:5px 10px 5px 8px;cursor:pointer;border:1px solid var(--border2);background:rgba(255,255,255,0.04);}
+.cam-pill.active{background:rgba(29,158,117,0.1);border-color:rgba(29,158,117,0.3);}
+.cam-pill-face{font-size:15px;line-height:1;}
+.cam-pill-txt{font-size:11px;font-weight:600;color:var(--text3);}
+.cam-pill.active .cam-pill-txt{color:var(--teal);}
+.cam-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);}
+.cam-pill.active .cam-dot{background:var(--teal);box-shadow:0 0 6px var(--teal-glow);}
+.dwell-bar-wrap{height:4px;background:rgba(255,255,255,0.04);flex-shrink:0;}
+.dwell-bar{height:100%;background:var(--teal);width:0%;}
+.q-banner{background:var(--bg2);border-bottom:2px solid rgba(29,158,117,0.22);padding:16px 18px;flex-shrink:0;display:flex;align-items:center;gap:12px;}
+.q-speaker-btn{width:36px;height:36px;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.28);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;cursor:pointer;}
+.q-speaker-btn:hover{background:rgba(29,158,117,0.22);}
+.q-read-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:4px;}
+.q-text{font-size:21px;font-weight:800;color:var(--text);line-height:1.25;}
+
+/* QUADRANT GRID */
+.quad-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;background:rgba(255,255,255,0.06);overflow:hidden;}
+.qtile{background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;cursor:pointer;transition:background .1s;}
+.qtile.empty{background:rgba(255,255,255,0.015);cursor:default;pointer-events:none;}
+.zone-lbl{position:absolute;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,0.11);line-height:1;pointer-events:none;}
+.qtile.tl .zone-lbl{top:9px;left:10px;}
+.qtile.tr .zone-lbl{top:9px;right:10px;}
+.qtile.bl .zone-lbl{bottom:9px;left:10px;}
+.qtile.br .zone-lbl{bottom:9px;right:10px;}
+.qtile::before{content:'';position:absolute;inset:0;background:var(--teal-lt);opacity:0;z-index:0;}
+.qtile.dwelling{background:rgba(29,158,117,0.07);outline:3px solid var(--teal);outline-offset:-3px;z-index:2;}
+.qtile.dwelling::before{opacity:1;}
+.qtile.dwelling .tile-label{color:var(--teal);}
+.tile-emoji{font-size:clamp(32px,8vw,56px);line-height:1;position:relative;z-index:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));}
+.tile-label{font-size:clamp(14px,4vw,22px);font-weight:800;color:var(--text);text-align:center;line-height:1.2;position:relative;z-index:1;padding:0 10px;}
+.dwell-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;opacity:0;pointer-events:none;transition:opacity .2s;}
+.dwell-ring.on{opacity:1;}
+.dwell-ring circle{fill:none;stroke:var(--teal);stroke-width:4;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset linear;}
+.sess-bottom{background:var(--bg2);border-top:1px solid var(--border);padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.sess-btn{padding:10px 16px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.sess-btn:hover{color:var(--text);}
+.sess-btn.primary{background:var(--teal);color:#fff;border-color:var(--teal);}
+.sess-spacer{flex:1;}
+
+/* FEEDBACK */
+#s-feedback{background:rgba(5,5,15,.97);align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.fb-emoji{font-size:96px;line-height:1;}
+.fb-label{font-size:36px;font-weight:800;color:var(--text);text-align:center;}
+.fb-q{font-size:14px;color:var(--text3);text-align:center;padding:0 28px;}
+.fb-actions{display:flex;gap:12px;margin-top:8px;}
+.fb-btn{padding:13px 32px;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+.fb-btn.again{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);}
+.fb-btn.next{background:var(--teal);color:#fff;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 18px;font-size:13px;color:var(--text);white-space:nowrap;transition:transform .3s ease;z-index:999;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ======= RESPONSIVE SCALING ======= */
+/* iPad landscape — compact header, maximize tile space */
+@media (min-width:768px){
+  .q-text{font-size:clamp(22px,3vw,36px);}
+  .tile-emoji{font-size:clamp(48px,8vh,80px);}
+  .tile-label{font-size:clamp(20px,3vh,32px);}
+  .q-banner{padding:12px 20px;}
+  .sess-top{padding:10px 20px;}
+  .sess-bottom{padding:10px 20px;}
+  .q-speaker-btn{width:44px;height:44px;font-size:18px;}
+}
+/* Laptop / large screen */
+@media (min-width:1024px){
+  .tile-emoji{font-size:clamp(56px,9vh,96px);}
+  .tile-label{font-size:clamp(24px,3.5vh,40px);}
+  .q-text{font-size:clamp(26px,3.5vw,48px);}
+  .zone-lbl{font-size:11px;}
+  .sess-btn{padding:12px 24px;font-size:14px;}
+}
+/* Force quad-grid to always fill remaining height */
+#s-session{height:100vh;height:100dvh;}
+.quad-grid{min-height:0;}
+/* Scale dwell ring with tile size */
+@media (min-width:768px){
+  .dwell-ring{width:120px;height:120px;}
+  .dwell-ring circle{r:50;cx:60;cy:60;}
+}
+@media (min-width:1024px){
+  .dwell-ring{width:160px;height:160px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="screen on" id="s-login">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-icon">💬</div>
+      <div><div class="login-title">Bo's Voice</div><div class="login-sub">Eye-gaze communication</div></div>
+    </div>
+    <label class="login-label">Access password</label>
+    <input class="login-input" type="password" id="login-pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-primary" onclick="doLogin()">Sign in</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- WIZARD -->
+<div class="screen" id="s-wizard">
+  <div class="wizard-progress" id="wiz-progress"></div>
+  <div class="wizard-step on" id="wstep-0">
+    <div class="wiz-emoji">💬</div>
+    <div class="wiz-title">Welcome to Bo's Voice</div>
+    <div class="wiz-sub">This app lets Bo communicate by gazing at answer tiles. Let's take 2 minutes to set it up. You can change everything later in Settings.</div>
+    <div style="flex:1"></div>
+  </div>
+  <div class="wizard-step" id="wstep-1">
+    <div class="wiz-emoji">&#x23F1;</div>
+    <div class="wiz-title">How long should Bo look at an answer to select it?</div>
+    <div class="wiz-sub">This is the dwell time. Start longer and reduce it as Bo gets more reliable. 2.5 seconds is a good starting point.</div>
+    <div class="dwell-big">
+      <button class="dwell-big-btn" onclick="adjDwell(-500)">&#x2212;</button>
+      <div class="dwell-big-val" id="wiz-dwell-val">2.5s</div>
+      <button class="dwell-big-btn" onclick="adjDwell(500)">+</button>
+    </div>
+    <div style="text-align:center;font-size:12px;color:var(--text3)">Tap - or + to adjust &nbsp;&bull;&nbsp; Range: 1.0s to 6.0s</div>
+    <div style="flex:1"></div>
+  </div>
+  <div class="wizard-step" id="wstep-2">
+    <div class="wiz-title">Which question categories do you want?</div>
+    <div class="wiz-sub">You can toggle individual questions on/off and add your own in Settings. Select at least one.</div>
+    <div class="cat-toggle-list" id="wiz-cat-list"></div>
+    <div style="flex:1"></div>
+  </div>
+  <div class="wizard-step" id="wstep-3">
+    <div class="wiz-emoji">&#x270F;</div>
+    <div class="wiz-title">Add a custom question?</div>
+    <div class="wiz-sub">Optional. You can add custom questions any time in Settings.</div>
+    <div class="add-q-form">
+      <div class="form-field">
+        <label class="form-label">Question text</label>
+        <input type="text" id="wiz-q-text" placeholder="e.g. Where would you like to be?">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Answer options (2-4)</label>
+        <div class="answer-list" id="wiz-answer-list"></div>
+        <button class="add-ans-btn" id="wiz-add-ans-btn" onclick="addAnsRow('wiz')">+ Add answer</button>
+      </div>
+    </div>
+    <div style="flex:1"></div>
+  </div>
+  <div class="wizard-step" id="wstep-4">
+    <div class="wiz-emoji">&#x1F389;</div>
+    <div class="wiz-title">All set!</div>
+    <div class="wiz-sub">Bo's Voice is ready. Start a session from the home screen and adjust anything in Settings at any time.</div>
+    <div style="flex:1"></div>
+  </div>
+  <div class="wiz-footer">
+    <button class="btn-secondary" id="wiz-back-btn" onclick="wizBack()" style="display:none">Back</button>
+    <button class="btn-primary" id="wiz-next-btn" onclick="wizNext()">Get started &#x2192;</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="s-home">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="app-icon">&#x1F4AC;</div>
+      <div><div class="app-name">Bo's Voice</div><div class="app-sub">Eye-gaze communication</div></div>
+    </div>
+    <button class="icon-btn" onclick="showSettings()" title="Settings">&#x2699;&#xFE0F;</button>
+    <button class="icon-btn" onclick="doSignout()" title="Sign out" style="font-size:13px;color:var(--text3)">&#x21A9;</button>
+  </div>
+  <div class="scroll-body">
+    <div class="section-label">Dwell time</div>
+    <div class="dwell-row">
+      <span class="dwell-row-label">Hold gaze this long to select</span>
+      <div class="dwell-adj">
+        <button class="adj-btn" onclick="adjDwell(-500)">&#x2212;</button>
+        <span class="adj-val" id="home-dwell-val">2.5s</span>
+        <button class="adj-btn" onclick="adjDwell(500)">+</button>
+      </div>
+    </div>
+    <div class="section-label">Start a session</div>
+    <div class="home-actions" id="home-actions"></div>
+    <div class="section-label" style="margin-top:20px">Today's responses</div>
+    <div id="home-log"><div class="log-empty">No responses yet today</div></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="screen" id="s-settings">
+  <div class="topbar">
+    <button class="icon-btn" onclick="show('s-home')">&#x2190;</button>
+    <div style="flex:1"><div class="app-name">Settings</div></div>
+    <button class="btn-primary" style="width:auto;padding:8px 16px;font-size:13px" onclick="saveSettings()">Save</button>
+  </div>
+  <div class="scroll-body">
+    <div class="section-label">Dwell time</div>
+    <div class="dwell-row" style="margin-bottom:20px">
+      <span class="dwell-row-label">Hold gaze this long to select</span>
+      <div class="dwell-adj">
+        <button class="adj-btn" onclick="adjDwell(-500)">&#x2212;</button>
+        <span class="adj-val" id="settings-dwell-val">2.5s</span>
+        <button class="adj-btn" onclick="adjDwell(500)">+</button>
+      </div>
+    </div>
+    <div class="section-label">Questions &mdash; drag to reorder &nbsp;&bull;&nbsp; toggle to enable/disable</div>
+    <div class="q-list" id="settings-q-list"></div>
+    <div class="section-label">Add a custom question</div>
+    <div class="add-q-form">
+      <div class="form-field">
+        <label class="form-label">Question text</label>
+        <input type="text" id="settings-q-text" placeholder="e.g. Where would you like to be?">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Answer options (2-4) &mdash; emoji optional</label>
+        <div class="answer-list" id="settings-answer-list"></div>
+        <button class="add-ans-btn" id="settings-add-ans-btn" onclick="addAnsRow('settings')">+ Add answer</button>
+      </div>
+      <button class="btn-primary" style="margin-top:8px" onclick="addCustomQ()">Add question</button>
+    </div>
+  </div>
+</div>
+
+<!-- SESSION -->
+<div class="screen" id="s-session">
+  <div class="sess-top">
+    <button class="icon-btn" onclick="endSession()">&#x2190;</button>
+    <div style="flex:1">
+      <div class="sess-title" id="sess-title">Session</div>
+      <div class="prog-wrap" id="sess-prog"></div>
+    </div>
+    <div class="cam-pill" id="cam-pill" onclick="toggleCam()">
+      <span class="cam-pill-face">&#x1F441;</span>
+      <span class="cam-pill-txt" id="cam-txt">Camera off</span>
+      <span class="cam-dot" id="cam-dot"></span>
+    </div>
+  </div>
+  <video id="cam-vid" autoplay playsinline muted style="display:none"></video>
+  <div class="dwell-bar-wrap"><div class="dwell-bar" id="dwell-bar"></div></div>
+  <div class="q-banner">
+    <button class="q-speaker-btn" onclick="speakQ()" title="Read aloud">&#x1F50A;</button>
+    <div>
+      <div class="q-read-label">Read aloud to Bo</div>
+      <div class="q-text" id="sess-q">Loading...</div>
+    </div>
+  </div>
+  <div class="quad-grid" id="quad-grid"></div>
+  <div class="sess-bottom">
+    <button class="sess-btn" onclick="prevQ()">&#x2190; Back</button>
+    <button class="sess-btn" onclick="skipQ()">Skip</button>
+    <div class="sess-spacer"></div>
+    <button class="sess-btn primary" onclick="nextQ()">Next &#x2192;</button>
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="screen" id="s-feedback">
+  <div class="fb-emoji" id="fb-emoji">&#x1F4AC;</div>
+  <div class="fb-label" id="fb-label">Answer</div>
+  <div class="fb-q" id="fb-q"></div>
+  <div class="fb-actions">
+    <button class="fb-btn again" onclick="askAgain()">Ask again</button>
+    <button class="fb-btn next" onclick="nextAfterFb()">Next &#x2192;</button>
+  </div>
+</div>
+
+<!-- EMOJI POPUP -->
+<div class="emoji-popup" id="emoji-popup"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ======= CONFIG ======= */
+const TEAM_PASSWORD = 'B0Lieve!';
+const SUPABASE_URL  = 'https://wgkhobvagnfcccsoqxnh.supabase.co';
+const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indna2hvYnZhZ25mY2Njc29xeG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDE0OTEsImV4cCI6MjA4OTY3NzQ5MX0.e8nbgNiRa_6x0IDmb4A0l5TKXOhMHGyI7FT2agVzngA';
+
+/* ======= BUILT-IN QUESTIONS ======= */
+const BUILTIN = [
+  {id:'yn1',cat:'Yes/No',  enabled:true, q:'Are you comfortable right now?',      answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'yn2',cat:'Yes/No',  enabled:true, q:'Are you in any pain?',                answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'yn3',cat:'Yes/No',  enabled:true, q:'Are you tired right now?',             answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'yn4',cat:'Yes/No',  enabled:true, q:'Are you hungry?',                     answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'yn5',cat:'Yes/No',  enabled:true, q:'Are you thirsty?',                    answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'yn6',cat:'Yes/No',  enabled:false,q:'Do you want the TV on?',              answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'yn7',cat:'Yes/No',  enabled:false,q:'Do you want music on?',               answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'yn8',cat:'Yes/No',  enabled:true, q:"Do you understand what I'm saying?",  answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
+  {id:'f1', cat:'Feelings',enabled:true, q:'How are you feeling right now?',      answers:[{e:'😊',l:'Good'},{e:'😐',l:'Okay'},{e:'😔',l:'Not great'},{e:'😣',l:'Bad'}]},
+  {id:'f2', cat:'Feelings',enabled:true, q:'How is your pain level?',             answers:[{e:'😊',l:'No pain'},{e:'😐',l:'Mild'},{e:'😣',l:'Moderate'},{e:'😖',l:'Severe'}]},
+  {id:'f3', cat:'Feelings',enabled:true, q:'How is your energy?',                 answers:[{e:'⚡',l:'Good'},{e:'😐',l:'Okay'},{e:'😴',l:'Very tired'}]},
+  {id:'f4', cat:'Feelings',enabled:false,q:'How is your mood today?',             answers:[{e:'😄',l:'Happy'},{e:'😐',l:'Neutral'},{e:'😔',l:'Sad'},{e:'😤',l:'Frustrated'}]},
+  {id:'n1', cat:'Needs',   enabled:true, q:'What do you need right now?',         answers:[{e:'💧',l:'Water'},{e:'🍽',l:'Food'},{e:'😴',l:'Rest'},{e:'🏥',l:'Help'}]},
+  {id:'n2', cat:'Needs',   enabled:true, q:'Are you too hot or too cold?',        answers:[{e:'🔥',l:'Too hot'},{e:'❄️',l:'Too cold'},{e:'👍',l:'Just right'}]},
+  {id:'n3', cat:'Needs',   enabled:false,q:'Would you like to be repositioned?',  answers:[{e:'✅',l:'Yes please'},{e:'❌',l:'No thanks'}]},
+  {id:'n4', cat:'Needs',   enabled:false,q:'What would help most right now?',     answers:[{e:'🤲',l:'Hold my hand'},{e:'🎵',l:'Music'},{e:'🤫',l:'Quiet'},{e:'📺',l:'TV on'}]},
+  {id:'p1', cat:'People',  enabled:false,q:'Who would you like to see?',          answers:[{e:'👨‍👩‍👦',l:'Family'},{e:'👫',l:'Friends'},{e:'👨‍⚕️',l:'Doctor'},{e:'🧘',l:'Nobody now'}]},
+  {id:'p2', cat:'People',  enabled:false,q:'Do you want someone to stay?',        answers:[{e:'✅',l:'Please stay'},{e:'❌',l:"I'm okay alone"}]},
+  {id:'t1', cat:'Therapy', enabled:false,q:'How did therapy feel today?',         answers:[{e:'💪',l:'Good'},{e:'😐',l:'Okay'},{e:'😓',l:'Too hard'},{e:'😴',l:'Too tired'}]},
+  {id:'t2', cat:'Therapy', enabled:false,q:'Do you want to do exercises now?',   answers:[{e:'✅',l:'Yes'},{e:'❌',l:'Not now'},{e:'⏰',l:'Later'}]},
+];
+const EMOJIS = ['✅','❌','😊','😐','😔','😣','😖','😄','😤','😴','⚡','💧','🍽','🏥','🔥','❄️','👍','🤲','🎵','🤫','📺','👥','👨‍⚕️','💪','⏰','🤔','👋','❤️','🙏','💊','🛌','🪑'];
+const CAT_ICONS = {'Yes/No':'✅','Feelings':'💙','Needs':'🙋','People':'👥','Therapy':'💪','Custom':'✏️'};
+
+/* ======= STATE ======= */
+let db=null, dwellMs=2500, questions=[], sessionQ=[], sessionIdx=0, sessionLog=[];
+let stream=null, cameraOn=false, dwellTarget=null, dwellTimer=null;
+let trackInterval=null, trackCanvas=null, trackCtx=null;
+let wizStep=0, wizCatOn={}, wizAns=[], settingsAns=[], currentQ=null, emojiTarget=null;
+
+/* ======= INIT ======= */
+window.addEventListener('DOMContentLoaded',()=>{
+  if(SUPABASE_URL){try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
+  if(sessionStorage.getItem('bv_auth')==='ok'){loadState();localStorage.getItem('bv_setup_done')?showHome():startWizard();}
+  initAnsRows('wiz',2); initAnsRows('settings',2);
+  document.getElementById('emoji-popup').addEventListener('click',e=>e.stopPropagation());
+  document.addEventListener('click',closeEmojiPopup);
+});
+
+/* ======= STATE ======= */
+function loadState(){
+  const s=localStorage.getItem('bv_questions');
+  questions=s?JSON.parse(s):BUILTIN.map(q=>({...q}));
+  const d=localStorage.getItem('bv_dwell');
+  if(d)dwellMs=+d;
+  updateDwellUI();
+}
+function saveState(){localStorage.setItem('bv_questions',JSON.stringify(questions));localStorage.setItem('bv_dwell',dwellMs);}
+
+/* ======= AUTH ======= */
+function doLogin(){
+  const pw=document.getElementById('login-pw').value.trim();
+  if(pw===TEAM_PASSWORD){sessionStorage.setItem('bv_auth','ok');loadState();localStorage.getItem('bv_setup_done')?showHome():startWizard();}
+  else document.getElementById('login-err').textContent='Incorrect password.';
+}
+function doSignout(){sessionStorage.removeItem('bv_auth');stopCam();show('s-login');document.getElementById('login-pw').value='';}
+
+/* ======= SCREENS ======= */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+function showHome(){renderHome();show('s-home');}
+function showSettings(){renderSettings();show('s-settings');}
+
+/* ======= DWELL ======= */
+function adjDwell(d){dwellMs=Math.max(1000,Math.min(6000,dwellMs+d));saveState();updateDwellUI();}
+function updateDwellUI(){
+  const v=(dwellMs/1000).toFixed(1)+'s';
+  ['home-dwell-val','settings-dwell-val','wiz-dwell-val'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+}
+
+/* ======= WIZARD ======= */
+function startWizard(){
+  wizStep=0;
+  const cats=[...new Set(BUILTIN.map(q=>q.cat))];
+  cats.forEach(c=>wizCatOn[c]=true);
+  const list=document.getElementById('wiz-cat-list');
+  list.innerHTML=cats.map(c=>{
+    const n=BUILTIN.filter(q=>q.cat===c).length;
+    return `<div class="cat-toggle-item on" id="wct-${c}" onclick="toggleWizCat('${c}')">
+      <span class="cat-toggle-icon">${CAT_ICONS[c]||'❓'}</span>
+      <div class="cat-toggle-text"><div class="cat-toggle-name">${c}</div><div class="cat-toggle-count">${n} questions</div></div>
+      <div class="cat-toggle-check" id="wcc-${c}">✓</div>
+    </div>`;
+  }).join('');
+  renderWizProg();
+  show('s-wizard');
+}
+function toggleWizCat(c){
+  wizCatOn[c]=!wizCatOn[c];
+  document.getElementById('wct-'+c).classList.toggle('on',wizCatOn[c]);
+  document.getElementById('wcc-'+c).textContent=wizCatOn[c]?'✓':'';
+  document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(v=>v);
+}
+function renderWizProg(){
+  document.getElementById('wiz-progress').innerHTML=Array.from({length:5},(_,i)=>`<div class="wp-dot ${i<wizStep?'done':i===wizStep?'cur':''}"></div>`).join('');
+  document.getElementById('wiz-back-btn').style.display=wizStep>0?'block':'none';
+  document.getElementById('wiz-next-btn').textContent=wizStep===4?"Start using Bo's Voice →":'Next →';
+  if(wizStep===2)document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(v=>v);
+  else document.getElementById('wiz-next-btn').disabled=false;
+}
+function wizNext(){
+  if(wizStep===4){
+    questions=BUILTIN.map(q=>({...q,enabled:wizCatOn[q.cat]!==false}));
+    const qt=document.getElementById('wiz-q-text').value.trim();
+    const ans=wizAns.filter(r=>r.l.trim()).slice(0,4).map(r=>({e:r.e||'',l:r.l.trim()}));
+    if(qt&&ans.length>=2)questions.push({id:'c'+Date.now(),cat:'Custom',enabled:true,q:qt,answers:ans});
+    saveState();localStorage.setItem('bv_setup_done','1');showHome();return;
+  }
+  wizStep++;
+  document.querySelectorAll('.wizard-step').forEach((s,i)=>s.classList.toggle('on',i===wizStep));
+  renderWizProg();
+}
+function wizBack(){
+  wizStep--;
+  document.querySelectorAll('.wizard-step').forEach((s,i)=>s.classList.toggle('on',i===wizStep));
+  renderWizProg();
+}
+
+/* ======= HOME ======= */
+function renderHome(){
+  updateDwellUI();
+  const enabled=questions.filter(q=>q.enabled);
+  const cats=[...new Set(enabled.map(q=>q.cat))];
+  const el=document.getElementById('home-actions');
+  if(!enabled.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">No questions enabled — go to Settings.</div>';return;}
+  const items=[{id:'all',name:'All Questions',icon:'▶️',n:enabled.length},...cats.map(c=>({id:c,name:c,icon:CAT_ICONS[c]||'❓',n:enabled.filter(q=>q.cat===c).length}))];
+  el.innerHTML='<div class="action-grid">'+items.map(it=>`<div class="action-card" onclick="startSession('${it.id}')"><div class="action-icon">${it.icon}</div><div class="action-name">${it.name}</div><div class="action-sub">${it.n} question${it.n!==1?'s':''}</div></div>`).join('')+'</div>';
+  const log=document.getElementById('home-log');
+  if(!sessionLog.length){log.innerHTML='<div class="log-empty">No responses yet today</div>';return;}
+  log.innerHTML=sessionLog.slice(0,14).map(e=>{
+    const t=e.ts.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    return `<div class="log-item"><div class="log-time">${t}</div><div><div class="log-q">${e.q}</div><div class="log-a">${e.e?e.e+' ':''}${e.a}</div></div></div>`;
+  }).join('');
+}
+
+/* ======= SETTINGS ======= */
+function renderSettings(){
+  updateDwellUI();
+  document.getElementById('settings-q-list').innerHTML=questions.map((q,i)=>{
+    const ans=q.answers.map(a=>(a.e?a.e+' ':'')+a.l).join(' · ');
+    return `<div class="q-item" draggable="true" data-idx="${i}" ondragstart="dStart(event,${i})" ondragover="dOver(event,${i})" ondrop="dDrop(event,${i})" ondragleave="dLeave(event,${i})">
+      <span class="q-drag-handle">&#x2807;</span>
+      <span class="q-item-emoji">${q.answers[0]?.e||'💬'}</span>
+      <div class="q-item-text"><div class="q-item-q">${q.q}</div><div class="q-item-answers">${ans}</div></div>
+      <button class="q-delete-btn" onclick="delQ(${i})">&#x00D7;</button>
+      <label class="q-toggle"><input type="checkbox" ${q.enabled?'checked':''} onchange="toggleQ(${i},this.checked)"><div class="q-toggle-track"></div><div class="q-toggle-thumb"></div></label>
+    </div>`;
+  }).join('');
+}
+function toggleQ(i,v){questions[i].enabled=v;}
+function delQ(i){if(confirm('Remove this question?')){questions.splice(i,1);renderSettings();}}
+function saveSettings(){saveState();showHome();showToast('Settings saved');}
+
+/* DRAG */
+let dragI=null;
+function dStart(e,i){dragI=i;setTimeout(()=>document.querySelector('[data-idx="'+i+'"]')?.classList.add('dragging'),0);}
+function dOver(e,i){e.preventDefault();document.querySelector('[data-idx="'+i+'"]')?.classList.add('drag-over');}
+function dLeave(e,i){document.querySelector('[data-idx="'+i+'"]')?.classList.remove('drag-over');}
+function dDrop(e,i){
+  e.preventDefault();
+  document.querySelectorAll('.q-item').forEach(el=>el.classList.remove('dragging','drag-over'));
+  if(dragI===null||dragI===i)return;
+  const m=questions.splice(dragI,1)[0];questions.splice(i,0,m);renderSettings();dragI=null;
+}
+
+/* ======= ANSWER BUILDER ======= */
+function initAnsRows(ctx,n){for(let i=0;i<n;i++)addAnsRow(ctx);}
+function addAnsRow(ctx){
+  const rows=ctx==='wiz'?wizAns:settingsAns;
+  const list=document.getElementById(ctx+'-answer-list');
+  const addBtn=document.getElementById(ctx+'-add-ans-btn');
+  if(rows.length>=4)return;
+  const i=rows.length;
+  const rowId=ctx+'-ar-'+i;
+  const row={e:'',l:''};rows.push(row);
+  const div=document.createElement('div');
+  div.className='answer-row';div.id=rowId;
+  div.innerHTML=`<button class="emoji-pick-btn" onclick="openEmoji(event,'${rowId}')" id="${rowId}-eb"><span id="${rowId}-ef">＋</span></button><input class="ans-text-input" type="text" placeholder="Answer ${i+1}" id="${rowId}-ti" oninput="(${ctx==='wiz'?'wizAns':'settingsAns'})[${i}].l=this.value"><button class="ans-remove" onclick="removeAns('${rowId}','${ctx}',${i})">&#x00D7;</button>`;
+  list.appendChild(div);
+  if(rows.length>=4)addBtn.style.display='none';
+}
+function removeAns(rowId,ctx,i){
+  const rows=ctx==='wiz'?wizAns:settingsAns;
+  document.getElementById(rowId)?.remove();rows.splice(i,1);
+  document.getElementById(ctx+'-add-ans-btn').style.display='';
+}
+function addCustomQ(){
+  const qt=document.getElementById('settings-q-text').value.trim();
+  if(!qt){showToast('Please enter a question');return;}
+  const ans=settingsAns.filter(r=>r.l.trim()).slice(0,4).map(r=>({e:r.e||'',l:r.l.trim()}));
+  if(ans.length<2){showToast('Add at least 2 answers');return;}
+  questions.push({id:'c'+Date.now(),cat:'Custom',enabled:true,q:qt,answers:ans});
+  saveState();
+  document.getElementById('settings-q-text').value='';
+  settingsAns.length=0;document.getElementById('settings-answer-list').innerHTML='';
+  document.getElementById('settings-add-ans-btn').style.display='';
+  initAnsRows('settings',2);renderSettings();showToast('Question added');
+}
+
+/* ======= EMOJI PICKER ======= */
+function openEmoji(e,rowId){
+  e.stopPropagation();emojiTarget=rowId;
+  const popup=document.getElementById('emoji-popup');
+  popup.innerHTML=`<span class="ep-none" onclick="pickEmoji('${rowId}','')">None</span>`+EMOJIS.map(em=>`<span class="ep-emoji" onclick="pickEmoji('${rowId}','${em}')">${em}</span>`).join('');
+  const btn=document.getElementById(rowId+'-eb');
+  const rect=btn.getBoundingClientRect();
+  popup.style.top=(rect.bottom+6)+'px';popup.style.left=Math.max(8,rect.left-80)+'px';
+  popup.classList.add('on');
+}
+function pickEmoji(rowId,emoji){
+  document.getElementById(rowId+'-ef').textContent=emoji||'＋';
+  const parts=rowId.split('-');const ctx=parts[0];const i=+parts[parts.length-1];
+  (ctx==='wiz'?wizAns:settingsAns)[i].e=emoji;
+  closeEmojiPopup();
+}
+function closeEmojiPopup(){document.getElementById('emoji-popup').classList.remove('on');emojiTarget=null;}
+
+/* ======= SESSION ======= */
+function startSession(catId){
+  sessionQ=catId==='all'?questions.filter(q=>q.enabled):questions.filter(q=>q.enabled&&q.cat===catId);
+  if(!sessionQ.length){showToast('No questions enabled for this category');return;}
+  sessionIdx=0;
+  document.getElementById('sess-title').textContent=catId==='all'?'All Questions':catId;
+  show('s-session');renderQ();
+}
+function renderQ(){
+  cancelDwell();currentQ=sessionQ[sessionIdx];
+  if(!currentQ){endSession();return;}
+  document.getElementById('sess-q').textContent=currentQ.q;
+  const dots=sessionQ.map((_,i)=>`<div class="pdot ${i<sessionIdx?'done':i===sessionIdx?'cur':''}"></div>`).join('');
+  document.getElementById('sess-prog').innerHTML=`<div class="prog-dots">${dots}</div><span class="prog-lbl">${sessionIdx+1} of ${sessionQ.length}</span>`;
+  renderQuads(currentQ.answers);resetBar();
+}
+function renderQuads(answers){
+  const grid=document.getElementById('quad-grid');
+  const pos=['tl','tr','bl','br'];
+  const labels=['Top left','Top right','Bottom left','Bottom right'];
+  let map={};
+  if(answers.length===2){map={tl:answers[0],br:answers[1]};}
+  else if(answers.length===3){map={tl:answers[0],tr:answers[1],bl:answers[2]};}
+  else{map={tl:answers[0],tr:answers[1],bl:answers[2],br:answers[3]};}
+  grid.innerHTML=pos.map((p,i)=>{
+    const a=map[p];
+    if(!a)return `<div class="qtile ${p} empty"></div>`;
+    return `<div class="qtile ${p}" id="t-${p}" onmouseenter="startDwell('${p}')" onmouseleave="cancelDwell()" ontouchstart="startDwell('${p}')" ontouchend="cancelDwell()" onclick="selectAns('${p}')">
+      <span class="zone-lbl">${labels[i]}</span>
+      ${a.e?`<div class="tile-emoji">${a.e}</div>`:''}
+      <div class="tile-label">${a.l}</div>
+      <svg class="dwell-ring" id="r-${p}" width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="35"/></svg>
+    </div>`;
+  }).join('');
+}
+function nextQ(){cancelDwell();sessionIdx<sessionQ.length-1?(sessionIdx++,renderQ()):endSession();}
+function prevQ(){cancelDwell();if(sessionIdx>0){sessionIdx--;renderQ();}}
+function skipQ(){nextQ();}
+function endSession(){stopCam();showHome();}
+
+/* ======= DWELL ======= */
+function startDwell(pos){
+  if(dwellTarget===pos)return;cancelDwell();dwellTarget=pos;
+  const tile=document.getElementById('t-'+pos);const ring=document.getElementById('r-'+pos);const bar=document.getElementById('dwell-bar');
+  if(!tile||!ring)return;
+  tile.classList.add('dwelling');ring.classList.add('on');
+  const c=ring.querySelector('circle');
+  if(c){c.style.transition=`stroke-dashoffset ${dwellMs}ms linear`;c.style.strokeDashoffset='0';}
+  if(bar){bar.style.transition=`width ${dwellMs}ms linear`;bar.style.width='100%';}
+  dwellTimer=setTimeout(()=>selectAns(pos),dwellMs);
+}
+function cancelDwell(){
+  clearTimeout(dwellTimer);dwellTimer=null;const prev=dwellTarget;dwellTarget=null;if(!prev)return;
+  const tile=document.getElementById('t-'+prev);const ring=document.getElementById('r-'+prev);
+  if(tile)tile.classList.remove('dwelling');
+  if(ring){ring.classList.remove('on');const c=ring.querySelector('circle');if(c){c.style.transition='none';c.style.strokeDashoffset='220';}}
+  resetBar();
+}
+function resetBar(){const b=document.getElementById('dwell-bar');if(b){b.style.transition='none';b.style.width='0%';}}
+function selectAns(pos){
+  cancelDwell();
+  const a=currentQ.answers;
+  let map=a.length===2?{tl:a[0],br:a[1]}:a.length===3?{tl:a[0],tr:a[1],bl:a[2]}:{tl:a[0],tr:a[1],bl:a[2],br:a[3]};
+  const ans=map[pos];if(!ans)return;
+  document.getElementById('fb-emoji').textContent=ans.e||'💬';
+  document.getElementById('fb-label').textContent=ans.l;
+  document.getElementById('fb-q').textContent=currentQ.q;
+  show('s-feedback');
+  const entry={ts:new Date(),q:currentQ.q,e:ans.e,a:ans.l};
+  sessionLog.unshift(entry);
+  if(db)db.from('communications').insert({created_at:entry.ts.toISOString(),category:currentQ.cat,question:entry.q,answer:entry.a}).catch(e=>console.warn(e));
+}
+function askAgain(){show('s-session');renderQ();}
+function nextAfterFb(){show('s-session');nextQ();}
+
+/* ======= CAMERA ======= */
+async function toggleCam(){
+  if(cameraOn){stopCam();return;}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:320},height:{ideal:240}},audio:false});
+    document.getElementById('cam-vid').srcObject=stream;cameraOn=true;
+    document.getElementById('cam-pill').classList.add('active');
+    document.getElementById('cam-txt').textContent='Tracking';
+    startTracking();
+  }catch(e){showToast('Camera blocked — check browser permissions');}
+}
+function stopCam(){
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
+  document.getElementById('cam-vid').srcObject=null;cameraOn=false;stopTracking();
+  const p=document.getElementById('cam-pill');if(p)p.classList.remove('active');
+  const t=document.getElementById('cam-txt');if(t)t.textContent='Camera off';
+}
+function startTracking(){trackCanvas=document.createElement('canvas');trackCanvas.width=80;trackCanvas.height=60;trackCtx=trackCanvas.getContext('2d');trackInterval=setInterval(sampleGaze,150);}
+function stopTracking(){if(trackInterval){clearInterval(trackInterval);trackInterval=null;}}
+function sampleGaze(){
+  if(!cameraOn||!stream)return;
+  const vid=document.getElementById('cam-vid');if(!vid||vid.readyState<2)return;
+  try{
+    trackCtx.save();trackCtx.scale(-1,1);trackCtx.drawImage(vid,-80,0,80,60);trackCtx.restore();
+    const d=trackCtx.getImageData(0,15,80,10).data;
+    let L=0,R=0;
+    for(let x=0;x<80;x++){const i=x*4;const dk=255-(d[i]+d[i+1]+d[i+2])/3;if(x<40)L+=dk;else R+=dk;}
+    const vd=trackCtx.getImageData(30,10,20,40).data;
+    let T=0,B=0;
+    for(let y=0;y<40;y++){const i=y*80;const dk=255-(vd[i]+vd[i+1]+vd[i+2])/3;if(y<20)T+=dk;else B+=dk;}
+    if(L+R<3000)return;
+    const isL=L>R,isT=T>B;
+    const a=currentQ?.answers;if(!a)return;
+    let gp=null;
+    if(a.length===2){gp=(isL&&isT)?'tl':(!isL&&!isT)?'br':null;}
+    else if(a.length===3){if(isL&&isT)gp='tl';else if(!isL&&isT)gp='tr';else if(isL&&!isT)gp='bl';}
+    else{gp=isL?(isT?'tl':'bl'):(isT?'tr':'br');}
+    if(gp&&gp!==dwellTarget){cancelDwell();startDwell(gp);}
+  }catch(e){}
+}
+
+/* ======= SPEECH ======= */
+function speakQ(){if('speechSynthesis'in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(currentQ?.q||'');u.rate=0.9;window.speechSynthesis.speak(u);}}
+
+/* ======= TOAST ======= */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+</script>
+</body>
+</html>
