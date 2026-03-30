@@ -435,29 +435,29 @@ const SUPABASE_URL  = 'https://wgkhobvagnfcccsoqxnh.supabase.co';
 const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indna2hvYnZhZ25mY2Njc29xeG5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDE0OTEsImV4cCI6MjA4OTY3NzQ5MX0.e8nbgNiRa_6x0IDmb4A0l5TKXOhMHGyI7FT2agVzngA';
 
 const BUILTIN = [
-  {id:'yn1',cat:'Yes/No',  enabled:true, q:'Are you comfortable right now?',      answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'yn2',cat:'Yes/No',  enabled:true, q:'Are you in any pain?',                answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'yn3',cat:'Yes/No',  enabled:true, q:'Are you tired right now?',             answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'yn4',cat:'Yes/No',  enabled:true, q:'Are you hungry?',                     answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'yn5',cat:'Yes/No',  enabled:true, q:'Are you thirsty?',                    answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'yn6',cat:'Yes/No',  enabled:false,q:'Do you want the TV on?',              answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'yn7',cat:'Yes/No',  enabled:false,q:'Do you want music on?',               answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'yn8',cat:'Yes/No',  enabled:true, q:"Do you understand what I'm saying?",  answers:[{e:'✅',l:'Yes'},{e:'❌',l:'No'}]},
-  {id:'f1', cat:'Feelings',enabled:true, q:'How are you feeling right now?',      answers:[{e:'😊',l:'Good'},{e:'😐',l:'Okay'},{e:'😔',l:'Not great'},{e:'😣',l:'Bad'}]},
-  {id:'f2', cat:'Feelings',enabled:true, q:'How is your pain level?',             answers:[{e:'😊',l:'No pain'},{e:'😐',l:'Mild'},{e:'😣',l:'Moderate'},{e:'😖',l:'Severe'}]},
-  {id:'f3', cat:'Feelings',enabled:true, q:'How is your energy?',                 answers:[{e:'⚡',l:'Good'},{e:'😐',l:'Okay'},{e:'😴',l:'Very tired'}]},
-  {id:'f4', cat:'Feelings',enabled:false,q:'How is your mood today?',             answers:[{e:'😄',l:'Happy'},{e:'😐',l:'Neutral'},{e:'😔',l:'Sad'},{e:'😤',l:'Frustrated'}]},
-  {id:'n1', cat:'Needs',   enabled:true, q:'What do you need right now?',         answers:[{e:'💧',l:'Water'},{e:'🍽',l:'Food'},{e:'😴',l:'Rest'},{e:'🏥',l:'Help'}]},
-  {id:'n2', cat:'Needs',   enabled:true, q:'Are you too hot or too cold?',        answers:[{e:'🔥',l:'Too hot'},{e:'❄️',l:'Too cold'},{e:'👍',l:'Just right'}]},
-  {id:'n3', cat:'Needs',   enabled:false,q:'Would you like to be repositioned?',  answers:[{e:'✅',l:'Yes please'},{e:'❌',l:'No thanks'}]},
-  {id:'n4', cat:'Needs',   enabled:false,q:'What would help most right now?',     answers:[{e:'🤲',l:'Hold my hand'},{e:'🎵',l:'Music'},{e:'🤫',l:'Quiet'},{e:'📺',l:'TV on'}]},
-  {id:'p1', cat:'People',  enabled:false,q:'Who would you like to see?',          answers:[{e:'👨‍👩‍👦',l:'Family'},{e:'👫',l:'Friends'},{e:'👨‍⚕️',l:'Doctor'},{e:'🧘',l:'Nobody now'}]},
-  {id:'p2', cat:'People',  enabled:false,q:'Do you want someone to stay?',        answers:[{e:'✅',l:'Please stay'},{e:'❌',l:"I'm okay alone"}]},
-  {id:'t1', cat:'Therapy', enabled:false,q:'How did therapy feel today?',         answers:[{e:'💪',l:'Good'},{e:'😐',l:'Okay'},{e:'😓',l:'Too hard'},{e:'😴',l:'Too tired'}]},
-  {id:'t2', cat:'Therapy', enabled:false,q:'Do you want to do exercises now?',   answers:[{e:'✅',l:'Yes'},{e:'❌',l:'Not now'},{e:'⏰',l:'Later'}]},
+  {id:'yn1',cat:'Yes/No',  enabled:true, q:'Are you comfortable right now?',      answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn2',cat:'Yes/No',  enabled:true, q:'Are you in any pain?',                answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn3',cat:'Yes/No',  enabled:true, q:'Are you tired right now?',             answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn4',cat:'Yes/No',  enabled:true, q:'Are you hungry?',                     answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn5',cat:'Yes/No',  enabled:true, q:'Are you thirsty?',                    answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn6',cat:'Yes/No',  enabled:false,q:'Do you want the TV on?',              answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn7',cat:'Yes/No',  enabled:false,q:'Do you want music on?',               answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn8',cat:'Yes/No',  enabled:true, q:"Do you understand what I'm saying?",  answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'f1', cat:'Feelings',enabled:true, q:'How are you feeling right now?',      answers:[{e:'\ud83d\ude0a',l:'Good'},{e:'\ud83d\ude10',l:'Okay'},{e:'\ud83d\ude14',l:'Not great'},{e:'\ud83d\ude23',l:'Bad'}]},
+  {id:'f2', cat:'Feelings',enabled:true, q:'How is your pain level?',             answers:[{e:'\ud83d\ude0a',l:'No pain'},{e:'\ud83d\ude10',l:'Mild'},{e:'\ud83d\ude23',l:'Moderate'},{e:'\ud83d\ude16',l:'Severe'}]},
+  {id:'f3', cat:'Feelings',enabled:true, q:'How is your energy?',                 answers:[{e:'\u26a1',l:'Good'},{e:'\ud83d\ude10',l:'Okay'},{e:'\ud83d\ude34',l:'Very tired'}]},
+  {id:'f4', cat:'Feelings',enabled:false,q:'How is your mood today?',             answers:[{e:'\ud83d\ude04',l:'Happy'},{e:'\ud83d\ude10',l:'Neutral'},{e:'\ud83d\ude14',l:'Sad'},{e:'\ud83d\ude24',l:'Frustrated'}]},
+  {id:'n1', cat:'Needs',   enabled:true, q:'What do you need right now?',         answers:[{e:'\ud83d\udca7',l:'Water'},{e:'\ud83c\udf7d',l:'Food'},{e:'\ud83d\ude34',l:'Rest'},{e:'\ud83c\udfe5',l:'Help'}]},
+  {id:'n2', cat:'Needs',   enabled:true, q:'Are you too hot or too cold?',        answers:[{e:'\ud83d\udd25',l:'Too hot'},{e:'\u2744\ufe0f',l:'Too cold'},{e:'\ud83d\udc4d',l:'Just right'}]},
+  {id:'n3', cat:'Needs',   enabled:false,q:'Would you like to be repositioned?',  answers:[{e:'\u2705',l:'Yes please'},{e:'\u274c',l:'No thanks'}]},
+  {id:'n4', cat:'Needs',   enabled:false,q:'What would help most right now?',     answers:[{e:'\ud83e\udd32',l:'Hold my hand'},{e:'\ud83c\udfb5',l:'Music'},{e:'\ud83e\udd2b',l:'Quiet'},{e:'\ud83d\udcfa',l:'TV on'}]},
+  {id:'p1', cat:'People',  enabled:false,q:'Who would you like to see?',          answers:[{e:'\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc66',l:'Family'},{e:'\ud83d\udc6b',l:'Friends'},{e:'\ud83d\udc68\u200d\u2695\ufe0f',l:'Doctor'},{e:'\ud83e\uddd8',l:'Nobody now'}]},
+  {id:'p2', cat:'People',  enabled:false,q:'Do you want someone to stay?',        answers:[{e:'\u2705',l:'Please stay'},{e:'\u274c',l:"I'm okay alone"}]},
+  {id:'t1', cat:'Therapy', enabled:false,q:'How did therapy feel today?',         answers:[{e:'\ud83d\udcaa',l:'Good'},{e:'\ud83d\ude10',l:'Okay'},{e:'\ud83d\ude13',l:'Too hard'},{e:'\ud83d\ude34',l:'Too tired'}]},
+  {id:'t2', cat:'Therapy', enabled:false,q:'Do you want to do exercises now?',   answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'Not now'},{e:'\u23f0',l:'Later'}]},
 ];
-const EMOJIS=['✅','❌','😊','😐','😔','😣','😖','😄','😤','😴','⚡','💧','🍽','🏥','🔥','❄️','👍','🤲','🎵','🤫','📺','👥','👨‍⚕️','💪','⏰','🤔','👋','❤️','🙏','💊','🛌'];
-const CAT_ICONS={'Yes/No':'✅','Feelings':'💙','Needs':'🙋','People':'👥','Therapy':'💪','Custom':'✏️'};
+const EMOJIS=['\u2705','\u274c','\ud83d\ude0a','\ud83d\ude10','\ud83d\ude14','\ud83d\ude23','\ud83d\ude16','\ud83d\ude04','\ud83d\ude24','\ud83d\ude34','\u26a1','\ud83d\udca7','\ud83c\udf7d','\ud83c\udfe5','\ud83d\udd25','\u2744\ufe0f','\ud83d\udc4d','\ud83e\udd32','\ud83c\udfb5','\ud83e\udd2b','\ud83d\udcfa','\ud83d\udc65','\ud83d\udc68\u200d\u2695\ufe0f','\ud83d\udcaa','\u23f0','\ud83e\udd14','\ud83d\udc4b','\u2764\ufe0f','\ud83d\ude4f','\ud83d\udc8a','\ud83d\udecc'];
+const CAT_ICONS={'Yes/No':'\u2705','Feelings':'\ud83d\udcd9','Needs':'\ud83d\ude4b','People':'\ud83d\udc65','Therapy':'\ud83d\udcaa','Custom':'\u270f\ufe0f'};
 const CAL_POINTS=[{x:.08,y:.08},{x:.92,y:.08},{x:.08,y:.92},{x:.92,y:.92},{x:.5,y:.08},{x:.5,y:.92},{x:.08,y:.5},{x:.92,y:.5},{x:.5,y:.5}];
 
 let db=null,dwellMs=2500,questions=[],sessionQ=[],sessionIdx=0,sessionLog=[];
@@ -468,11 +468,11 @@ let gazeActive=false,gazeCalibrated=false,calTimestamp=null;
 let lastGazeX=0,lastGazeY=0,gazeSmooth=0.15;
 let dragI=null;
 
-window.addEventListener('DOMContentLoaded',()=>{
+window.addEventListener('DOMContentLoaded',function(){
   if(SUPABASE_URL){try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
   if(sessionStorage.getItem('bv_auth')==='ok'){loadState();routeAfterLogin();}
   initAnsRows('wiz',2);initAnsRows('settings',2);
-  document.getElementById('emoji-popup').addEventListener('click',e=>e.stopPropagation());
+  document.getElementById('emoji-popup').addEventListener('click',function(e){e.stopPropagation();});
   document.addEventListener('click',closeEmojiPopup);
 });
 
@@ -481,11 +481,11 @@ function routeAfterLogin(){
   else{showHome();}
 }
 function loadState(){
-  const s=localStorage.getItem('bv_questions');
-  questions=s?JSON.parse(s):BUILTIN.map(q=>({...q}));
-  const d=localStorage.getItem('bv_dwell');
+  var s=localStorage.getItem('bv_questions');
+  questions=s?JSON.parse(s):BUILTIN.map(function(q){return Object.assign({},q);});
+  var d=localStorage.getItem('bv_dwell');
   if(d)dwellMs=+d;
-  const calTs=localStorage.getItem('bv_cal_ts');
+  var calTs=localStorage.getItem('bv_cal_ts');
   if(calTs){gazeCalibrated=true;calTimestamp=new Date(+calTs);}
   updateDwellUI();
 }
@@ -494,75 +494,75 @@ function saveState(){
   localStorage.setItem('bv_dwell',dwellMs);
 }
 function doLogin(){
-  const pw=document.getElementById('login-pw').value.trim();
+  var pw=document.getElementById('login-pw').value.trim();
   if(pw===TEAM_PASSWORD){sessionStorage.setItem('bv_auth','ok');loadState();routeAfterLogin();}
   else document.getElementById('login-err').textContent='Incorrect password.';
 }
 function doSignout(){sessionStorage.removeItem('bv_auth');stopGaze();show('s-login');document.getElementById('login-pw').value='';}
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+function show(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});document.getElementById(id).classList.add('on');}
 function showHome(){renderHome();show('s-home');}
 function showSettings(){renderSettings();show('s-settings');}
 function adjDwell(d){dwellMs=Math.max(1000,Math.min(6000,dwellMs+d));saveState();updateDwellUI();}
 function updateDwellUI(){
-  const v=(dwellMs/1000).toFixed(1)+'s';
-  ['home-dwell-val','settings-dwell-val','wiz-dwell-val'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+  var v=(dwellMs/1000).toFixed(1)+'s';
+  ['home-dwell-val','settings-dwell-val','wiz-dwell-val'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=v;});
 }
 function updateCalStatusUI(){
-  ['home-cal-dot','settings-cal-dot'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('calibrated',gazeCalibrated);});
-  ['home-cal-label','settings-cal-label'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=gazeCalibrated?'Eye tracker calibrated':'Not calibrated';});
-  const val=document.getElementById('home-cal-val');
+  ['home-cal-dot','settings-cal-dot'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle('calibrated',gazeCalibrated);});
+  ['home-cal-label','settings-cal-label'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=gazeCalibrated?'Eye tracker calibrated':'Not calibrated';});
+  var val=document.getElementById('home-cal-val');
   if(val&&calTimestamp){val.classList.add('calibrated');val.textContent='Last calibrated '+calTimestamp.toLocaleDateString();}
   else if(val){val.classList.remove('calibrated');val.textContent='';}
 }
-
 function startWizard(){
   wizStep=0;
-  const cats=[...new Set(BUILTIN.map(q=>q.cat))];
-  cats.forEach(c=>wizCatOn[c]=true);
-  const list=document.getElementById('wiz-cat-list');
-  list.innerHTML=cats.map(c=>{
-    const n=BUILTIN.filter(q=>q.cat===c).length;
-    return `<div class="cat-toggle-item on" id="wct-${c}" onclick="toggleWizCat('${c}')">
-      <span class="cat-toggle-icon">${CAT_ICONS[c]||'❓'}</span>
-      <div class="cat-toggle-text"><div class="cat-toggle-name">${c}</div><div class="cat-toggle-count">${n} questions</div></div>
-      <div class="cat-toggle-check" id="wcc-${c}">&#x2713;</div>
-    </div>`;
+  var cats=[];
+  BUILTIN.forEach(function(q){if(cats.indexOf(q.cat)===-1)cats.push(q.cat);});
+  cats.forEach(function(c){wizCatOn[c]=true;});
+  var list=document.getElementById('wiz-cat-list');
+  list.innerHTML=cats.map(function(c){
+    var n=BUILTIN.filter(function(q){return q.cat===c;}).length;
+    return '<div class="cat-toggle-item on" id="wct-'+c+'" onclick="toggleWizCat(\''+c+'\')">'+
+      '<span class="cat-toggle-icon">'+(CAT_ICONS[c]||'?')+'</span>'+
+      '<div class="cat-toggle-text"><div class="cat-toggle-name">'+c+'</div><div class="cat-toggle-count">'+n+' questions</div></div>'+
+      '<div class="cat-toggle-check" id="wcc-'+c+'">&#x2713;</div></div>';
   }).join('');
   renderWizProg();show('s-wizard');
 }
 function toggleWizCat(c){
   wizCatOn[c]=!wizCatOn[c];
   document.getElementById('wct-'+c).classList.toggle('on',wizCatOn[c]);
-  document.getElementById('wcc-'+c).textContent=wizCatOn[c]?'✓':'';
-  if(wizStep===2)document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(v=>v);
+  document.getElementById('wcc-'+c).textContent=wizCatOn[c]?'\u2713':'';
+  if(wizStep===2)document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(function(v){return v;});
 }
 function renderWizProg(){
-  document.getElementById('wiz-progress').innerHTML=Array.from({length:5},(_,i)=>`<div class="wp-dot ${i<wizStep?'done':i===wizStep?'cur':''}"></div>`).join('');
+  document.getElementById('wiz-progress').innerHTML=Array.from({length:5},function(_,i){return '<div class="wp-dot '+(i<wizStep?'done':i===wizStep?'cur':'')+'"></div>';}).join('');
   document.getElementById('wiz-back-btn').style.display=wizStep>0?'block':'none';
-  document.getElementById('wiz-next-btn').textContent=wizStep===4?'Calibrate eye tracker &#x2192;':'Next &#x2192;';
-  if(wizStep===2)document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(v=>v);
+  document.getElementById('wiz-next-btn').innerHTML=wizStep===4?'Calibrate eye tracker &#x2192;':'Next &#x2192;';
+  if(wizStep===2)document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(function(v){return v;});
   else document.getElementById('wiz-next-btn').disabled=false;
 }
 function wizNext(){
   if(wizStep===4){
-    questions=BUILTIN.map(q=>({...q,enabled:wizCatOn[q.cat]!==false}));
-    const qt=document.getElementById('wiz-q-text').value.trim();
-    const ans=wizAns.filter(r=>r.l.trim()).slice(0,4).map(r=>({e:r.e||'',l:r.l.trim()}));
+    questions=BUILTIN.map(function(q){return Object.assign({},q,{enabled:wizCatOn[q.cat]!==false});});
+    var qt=document.getElementById('wiz-q-text').value.trim();
+    var ans=wizAns.filter(function(r){return r.l.trim();}).slice(0,4).map(function(r){return {e:r.e||'',l:r.l.trim()};});
     if(qt&&ans.length>=2)questions.push({id:'c'+Date.now(),cat:'Custom',enabled:true,q:qt,answers:ans});
     saveState();localStorage.setItem('bv_setup_done','1');
     startCalibration(true);return;
   }
   wizStep++;
-  document.querySelectorAll('.wizard-step').forEach((s,i)=>s.classList.toggle('on',i===wizStep));
+  document.querySelectorAll('.wizard-step').forEach(function(s,i){s.classList.toggle('on',i===wizStep);});
   renderWizProg();
 }
 function wizBack(){
   wizStep--;
-  document.querySelectorAll('.wizard-step').forEach((s,i)=>s.classList.toggle('on',i===wizStep));
+  document.querySelectorAll('.wizard-step').forEach(function(s,i){s.classList.toggle('on',i===wizStep);});
   renderWizProg();
 }
 
-async function startCalibration(fromWizard){
+/* startCalibration is fully synchronous — camera started via .then() so nothing can interrupt the screen render */
+function startCalibration(fromWizard){
   calActive=false;calPointIdx=0;calClicks=0;
   show('s-calibrate');
   document.getElementById('cal-instruction').textContent='Position the device so the face is clearly visible, then tap Start.';
@@ -571,58 +571,39 @@ async function startCalibration(fromWizard){
   document.getElementById('cal-action-btn').onclick=calAction;
   document.getElementById('cal-target').classList.remove('on');
   renderCalDots(-1);
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});
-    document.getElementById('cal-cam-preview').srcObject=stream;
-  }catch(e){
-    document.getElementById('cal-sub').textContent='Camera access denied. You can still use touch-only mode.';
+  if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+    navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false})
+      .then(function(stream){document.getElementById('cal-cam-preview').srcObject=stream;})
+      .catch(function(){document.getElementById('cal-sub').textContent='Camera access denied. You can still use touch-only mode.';});
   }
 }
-
 function renderCalDots(currentIdx){
-  document.getElementById('cal-prog-dots').innerHTML=CAL_POINTS.map((_,i)=>`<div class="cal-prog-dot ${i<currentIdx?'done':i===currentIdx?'cur':''}"></div>`).join('');
+  document.getElementById('cal-prog-dots').innerHTML=CAL_POINTS.map(function(_,i){return '<div class="cal-prog-dot '+(i<currentIdx?'done':i===currentIdx?'cur':'')+'"></div>';}).join('');
 }
-
-async function calAction(){
+function calAction(){
   if(calActive)return;
-  calActive=true;
-  calPointIdx=0;
+  calActive=true;calPointIdx=0;
   document.getElementById('cal-overlay').style.pointerEvents='none';
   document.getElementById('cal-overlay').style.opacity='0';
-
   if(window.webgazer){
     try{
-      webgazer
-        .setRegression('ridge')
-        .setTracker('TFFacemesh')
-        .saveDataAcrossSessions(false)
-        .setGazeListener(onGaze)
-        .showVideoPreview(false)
-        .showPredictionPoints(false);
+      webgazer.setRegression('ridge').setTracker('TFFacemesh').saveDataAcrossSessions(false).setGazeListener(onGaze).showVideoPreview(false).showPredictionPoints(false);
       webgazer.params.showFaceOverlay=false;
       webgazer.params.showFaceFeedbackBox=false;
-      await Promise.race([
-        webgazer.begin(),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
-      ]);
-      document.querySelectorAll('[id^="webgazer"]').forEach(el=>{
-        el.style.display='none';
-        el.style.visibility='hidden';
-      });
-      console.log('WebGazer ready');
-    }catch(e){
-      console.warn('WebGazer error:',e.message);
-    }
+      webgazer.begin().then(function(){
+        document.querySelectorAll('[id^="webgazer"]').forEach(function(el){el.style.display='none';el.style.visibility='hidden';});
+        console.log('WebGazer ready');
+      }).catch(function(e){console.warn('WebGazer error:',e);});
+    }catch(e){console.warn('WebGazer setup error:',e);}
   }
   showCalTarget(0);
 }
-
 function showCalTarget(idx){
   if(idx>=CAL_POINTS.length){finishCalibration();return;}
   calPointIdx=idx;calClicks=0;
   renderCalDots(idx);
-  const pt=CAL_POINTS[idx];
-  const target=document.getElementById('cal-target');
+  var pt=CAL_POINTS[idx];
+  var target=document.getElementById('cal-target');
   target.style.left=(pt.x*100)+'%';
   target.style.top=(pt.y*100)+'%';
   target.classList.add('on');
@@ -630,60 +611,49 @@ function showCalTarget(idx){
 }
 function onCalTargetClick(){
   calClicks++;
-  if(window.webgazer){
-    const pt=CAL_POINTS[calPointIdx];
-    webgazer.recordScreenPosition(pt.x*window.innerWidth,pt.y*window.innerHeight,'click');
-  }
-  if(calClicks>=calClicksPerPoint){
-    document.getElementById('cal-target').classList.remove('on');
-    setTimeout(()=>showCalTarget(calPointIdx+1),300);
-  }
+  if(window.webgazer){var pt=CAL_POINTS[calPointIdx];webgazer.recordScreenPosition(pt.x*window.innerWidth,pt.y*window.innerHeight,'click');}
+  if(calClicks>=calClicksPerPoint){document.getElementById('cal-target').classList.remove('on');setTimeout(function(){showCalTarget(calPointIdx+1);},300);}
 }
 function finishCalibration(){
-  calActive=false;
-  gazeCalibrated=true;
-  calTimestamp=new Date();
+  calActive=false;gazeCalibrated=true;calTimestamp=new Date();
   localStorage.setItem('bv_cal_ts',calTimestamp.getTime());
   if(window.webgazer){webgazer.pause();}
-  const overlay=document.getElementById('cal-overlay');
+  var overlay=document.getElementById('cal-overlay');
   overlay.style.opacity='1';overlay.style.pointerEvents='all';
   document.getElementById('cal-instruction').textContent='Calibration complete!';
   document.getElementById('cal-sub').textContent='The eye tracker is ready. Accuracy improves with use.';
   document.getElementById('cal-prog-dots').innerHTML='';
-  document.getElementById('cal-action-btn').textContent="Start using Bo's Voice →";
-  document.getElementById('cal-action-btn').onclick=()=>showHome();
+  document.getElementById('cal-action-btn').textContent="Start using Bo's Voice \u2192";
+  document.getElementById('cal-action-btn').onclick=function(){showHome();};
   document.getElementById('cal-target').classList.remove('on');
   updateCalStatusUI();
-  const vid=document.getElementById('cal-cam-preview');
-  if(vid.srcObject){vid.srcObject.getTracks().forEach(t=>t.stop());vid.srcObject=null;}
+  var vid=document.getElementById('cal-cam-preview');
+  if(vid.srcObject){vid.srcObject.getTracks().forEach(function(t){t.stop();});vid.srcObject=null;}
 }
 function skipCalibration(){
   if(window.webgazer){try{webgazer.end();}catch(e){}}
-  const vid=document.getElementById('cal-cam-preview');
-  if(vid.srcObject){vid.srcObject.getTracks().forEach(t=>t.stop());vid.srcObject=null;}
+  var vid=document.getElementById('cal-cam-preview');
+  if(vid.srcObject){vid.srcObject.getTracks().forEach(function(t){t.stop();});vid.srcObject=null;}
   showHome();
 }
-
 function onGaze(data,elapsedTime){
   if(!data||!gazeActive)return;
   lastGazeX=lastGazeX+(data.x-lastGazeX)*gazeSmooth;
   lastGazeY=lastGazeY+(data.y-lastGazeY)*gazeSmooth;
-  const dot=document.getElementById('gaze-dot');
-  dot.style.left=lastGazeX+'px';
-  dot.style.top=lastGazeY+'px';
+  var dot=document.getElementById('gaze-dot');
+  dot.style.left=lastGazeX+'px';dot.style.top=lastGazeY+'px';
   mapGazeToQuadrant(lastGazeX,lastGazeY);
 }
 function mapGazeToQuadrant(x,y){
-  const grid=document.getElementById('quad-grid');
+  var grid=document.getElementById('quad-grid');
   if(!grid||!currentQ)return;
-  const rect=grid.getBoundingClientRect();
+  var rect=grid.getBoundingClientRect();
   if(x<rect.left||x>rect.right||y<rect.top||y>rect.bottom){cancelDwell();return;}
-  const midX=rect.left+rect.width/2,midY=rect.top+rect.height/2;
-  const dzX=rect.width*0.08,dzY=rect.height*0.08;
+  var midX=rect.left+rect.width/2,midY=rect.top+rect.height/2;
+  var dzX=rect.width*0.08,dzY=rect.height*0.08;
   if(Math.abs(x-midX)<dzX||Math.abs(y-midY)<dzY){cancelDwell();return;}
-  const isLeft=x<midX,isTop=y<midY;
-  const a=currentQ.answers;
-  let pos=null;
+  var isLeft=x<midX,isTop=y<midY;
+  var a=currentQ.answers;var pos=null;
   if(a.length===2){if(isLeft&&isTop)pos='tl';else if(!isLeft&&!isTop)pos='br';}
   else if(a.length===3){if(isLeft&&isTop)pos='tl';else if(!isLeft&&isTop)pos='tr';else if(isLeft&&!isTop)pos='bl';}
   else{pos=isLeft?(isTop?'tl':'bl'):(isTop?'tr':'br');}
@@ -691,86 +661,87 @@ function mapGazeToQuadrant(x,y){
     if(pos!==dwellTarget){cancelDwell();startDwell(pos);}
   }else{cancelDwell();}
 }
-async function startGaze(){
-  if(!gazeCalibrated){showToast('Calibrate first — go to Settings');return;}
+function startGaze(){
+  if(!gazeCalibrated){showToast('Calibrate first \u2014 go to Settings');return;}
   if(!window.webgazer)return;
-  try{
-    await webgazer.resume();
+  webgazer.resume().then(function(){
     webgazer.showPredictionPoints(false);
     gazeActive=true;
     document.getElementById('gaze-dot').style.display='block';
     document.getElementById('gaze-pill').classList.add('active');
     document.getElementById('gaze-pill-txt').textContent='Tracking';
-  }catch(e){showToast('Eye tracker error — try recalibrating');}
+  }).catch(function(){showToast('Eye tracker error \u2014 try recalibrating');});
 }
 function stopGaze(){
   gazeActive=false;
   if(window.webgazer){try{webgazer.pause();}catch(e){}}
   document.getElementById('gaze-dot').style.display='none';
-  const pill=document.getElementById('gaze-pill');
-  if(pill){pill.classList.remove('active');const t=document.getElementById('gaze-pill-txt');if(t)t.textContent='Gaze off';}
+  var pill=document.getElementById('gaze-pill');
+  if(pill){pill.classList.remove('active');var t=document.getElementById('gaze-pill-txt');if(t)t.textContent='Gaze off';}
   cancelDwell();
 }
 function toggleGaze(){gazeActive?stopGaze():startGaze();}
-
 function renderHome(){
   updateDwellUI();updateCalStatusUI();
-  const enabled=questions.filter(q=>q.enabled);
-  const cats=[...new Set(enabled.map(q=>q.cat))];
-  const el=document.getElementById('home-actions');
-  if(!enabled.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">No questions enabled — go to Settings.</div>';return;}
-  const items=[{id:'all',name:'All Questions',icon:'&#x25B6;&#xFE0F;',n:enabled.length},...cats.map(c=>({id:c,name:c,icon:CAT_ICONS[c]||'❓',n:enabled.filter(q=>q.cat===c).length}))];
-  el.innerHTML='<div class="action-grid">'+items.map(it=>`<div class="action-card" onclick="startSession('${it.id}')"><div class="action-icon">${it.icon}</div><div class="action-name">${it.name}</div><div class="action-sub">${it.n} question${it.n!==1?'s':''}</div></div>`).join('')+'</div>';
-  const log=document.getElementById('home-log');
+  var enabled=questions.filter(function(q){return q.enabled;});
+  var cats=[];enabled.forEach(function(q){if(cats.indexOf(q.cat)===-1)cats.push(q.cat);});
+  var el=document.getElementById('home-actions');
+  if(!enabled.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">No questions enabled \u2014 go to Settings.</div>';return;}
+  var items=[{id:'all',name:'All Questions',icon:'&#x25B6;&#xFE0F;',n:enabled.length}].concat(cats.map(function(c){return {id:c,name:c,icon:CAT_ICONS[c]||'?',n:enabled.filter(function(q){return q.cat===c;}).length};}));
+  el.innerHTML='<div class="action-grid">'+items.map(function(it){return '<div class="action-card" onclick="startSession(\''+it.id+'\')"><div class="action-icon">'+it.icon+'</div><div class="action-name">'+it.name+'</div><div class="action-sub">'+it.n+' question'+(it.n!==1?'s':'')+'</div></div>';}).join('')+'</div>';
+  var log=document.getElementById('home-log');
   if(!sessionLog.length){log.innerHTML='<div class="log-empty">No responses yet today</div>';return;}
-  log.innerHTML=sessionLog.slice(0,14).map(e=>{
-    const t=e.ts.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-    return `<div class="log-item"><div class="log-time">${t}</div><div><div class="log-q">${e.q}</div><div class="log-a">${e.e?e.e+' ':''}${e.a}</div></div></div>`;
+  log.innerHTML=sessionLog.slice(0,14).map(function(e){
+    var t=e.ts.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    return '<div class="log-item"><div class="log-time">'+t+'</div><div><div class="log-q">'+e.q+'</div><div class="log-a">'+(e.e?e.e+' ':'')+e.a+'</div></div></div>';
   }).join('');
 }
 function renderSettings(){
   updateDwellUI();updateCalStatusUI();
-  document.getElementById('settings-q-list').innerHTML=questions.map((q,i)=>{
-    const ans=q.answers.map(a=>(a.e?a.e+' ':'')+a.l).join(' · ');
-    return `<div class="q-item" draggable="true" data-idx="${i}" ondragstart="dStart(event,${i})" ondragover="dOver(event,${i})" ondrop="dDrop(event,${i})" ondragleave="dLeave(event,${i})">
-      <span class="q-drag-handle">&#x2807;</span>
-      <span class="q-item-emoji">${q.answers[0]?.e||'💬'}</span>
-      <div class="q-item-text"><div class="q-item-q">${q.q}</div><div class="q-item-answers">${ans}</div></div>
-      <button class="q-delete-btn" onclick="delQ(${i})">&#x00D7;</button>
-      <label class="q-toggle"><input type="checkbox" ${q.enabled?'checked':''} onchange="toggleQ(${i},this.checked)"><div class="q-toggle-track"></div><div class="q-toggle-thumb"></div></label>
-    </div>`;
+  document.getElementById('settings-q-list').innerHTML=questions.map(function(q,i){
+    var ans=q.answers.map(function(a){return (a.e?a.e+' ':'')+a.l;}).join(' \u00b7 ');
+    return '<div class="q-item" draggable="true" data-idx="'+i+'" ondragstart="dStart(event,'+i+')" ondragover="dOver(event,'+i+')" ondrop="dDrop(event,'+i+')" ondragleave="dLeave(event,'+i+')">'+
+      '<span class="q-drag-handle">&#x2807;</span>'+
+      '<span class="q-item-emoji">'+(q.answers[0]&&q.answers[0].e?q.answers[0].e:'\ud83d\udcac')+'</span>'+
+      '<div class="q-item-text"><div class="q-item-q">'+q.q+'</div><div class="q-item-answers">'+ans+'</div></div>'+
+      '<button class="q-delete-btn" onclick="delQ('+i+')">&#x00D7;</button>'+
+      '<label class="q-toggle"><input type="checkbox" '+(q.enabled?'checked':'')+' onchange="toggleQ('+i+',this.checked)"><div class="q-toggle-track"></div><div class="q-toggle-thumb"></div></label>'+
+      '</div>';
   }).join('');
 }
 function toggleQ(i,v){questions[i].enabled=v;}
 function delQ(i){if(confirm('Remove this question?')){questions.splice(i,1);renderSettings();}}
 function saveSettings(){saveState();showHome();showToast('Settings saved');}
-function dStart(e,i){dragI=i;setTimeout(()=>document.querySelector('[data-idx="'+i+'"]')?.classList.add('dragging'),0);}
-function dOver(e,i){e.preventDefault();document.querySelector('[data-idx="'+i+'"]')?.classList.add('drag-over');}
-function dLeave(e,i){document.querySelector('[data-idx="'+i+'"]')?.classList.remove('drag-over');}
+function dStart(e,i){dragI=i;setTimeout(function(){var el=document.querySelector('[data-idx="'+i+'"]');if(el)el.classList.add('dragging');},0);}
+function dOver(e,i){e.preventDefault();var el=document.querySelector('[data-idx="'+i+'"]');if(el)el.classList.add('drag-over');}
+function dLeave(e,i){var el=document.querySelector('[data-idx="'+i+'"]');if(el)el.classList.remove('drag-over');}
 function dDrop(e,i){
-  e.preventDefault();document.querySelectorAll('.q-item').forEach(el=>el.classList.remove('dragging','drag-over'));
+  e.preventDefault();document.querySelectorAll('.q-item').forEach(function(el){el.classList.remove('dragging','drag-over');});
   if(dragI===null||dragI===i)return;
-  const m=questions.splice(dragI,1)[0];questions.splice(i,0,m);renderSettings();dragI=null;
+  var m=questions.splice(dragI,1)[0];questions.splice(i,0,m);renderSettings();dragI=null;
 }
-function initAnsRows(ctx,n){for(let i=0;i<n;i++)addAnsRow(ctx);}
+function initAnsRows(ctx,n){for(var i=0;i<n;i++)addAnsRow(ctx);}
 function addAnsRow(ctx){
-  const rows=ctx==='wiz'?wizAns:settingsAns;
-  const list=document.getElementById(ctx+'-answer-list');
-  const addBtn=document.getElementById(ctx+'-add-ans-btn');
+  var rows=ctx==='wiz'?wizAns:settingsAns;
+  var list=document.getElementById(ctx+'-answer-list');
+  var addBtn=document.getElementById(ctx+'-add-ans-btn');
   if(rows.length>=4)return;
-  const i=rows.length;const rowId=ctx+'-ar-'+i;const row={e:'',l:''};rows.push(row);
-  const div=document.createElement('div');div.className='answer-row';div.id=rowId;
-  div.innerHTML=`<button class="emoji-pick-btn" onclick="openEmoji(event,'${rowId}')" id="${rowId}-eb"><span id="${rowId}-ef">&#xFF0B;</span></button><input class="ans-text-input" type="text" placeholder="Answer ${i+1}" oninput="(${ctx==='wiz'?'wizAns':'settingsAns'})[${i}].l=this.value"><button class="ans-remove" onclick="removeAns('${rowId}','${ctx}',${i})">&#x00D7;</button>`;
+  var i=rows.length;var rowId=ctx+'-ar-'+i;var row={e:'',l:''};rows.push(row);
+  var div=document.createElement('div');div.className='answer-row';div.id=rowId;
+  div.innerHTML='<button class="emoji-pick-btn" onclick="openEmoji(event,\''+rowId+'\')" id="'+rowId+'-eb"><span id="'+rowId+'-ef">&#xFF0B;</span></button>'+
+    '<input class="ans-text-input" type="text" placeholder="Answer '+(i+1)+'" oninput="('+(ctx==='wiz'?'wizAns':'settingsAns')+')['+i+'].l=this.value">'+
+    '<button class="ans-remove" onclick="removeAns(\''+rowId+'\',\''+ctx+'\','+i+')">&#x00D7;</button>';
   list.appendChild(div);if(rows.length>=4)addBtn.style.display='none';
 }
 function removeAns(rowId,ctx,i){
-  const rows=ctx==='wiz'?wizAns:settingsAns;
-  document.getElementById(rowId)?.remove();rows.splice(i,1);document.getElementById(ctx+'-add-ans-btn').style.display='';
+  var rows=ctx==='wiz'?wizAns:settingsAns;
+  var el=document.getElementById(rowId);if(el)el.remove();
+  rows.splice(i,1);document.getElementById(ctx+'-add-ans-btn').style.display='';
 }
 function addCustomQ(){
-  const qt=document.getElementById('settings-q-text').value.trim();
+  var qt=document.getElementById('settings-q-text').value.trim();
   if(!qt){showToast('Please enter a question');return;}
-  const ans=settingsAns.filter(r=>r.l.trim()).slice(0,4).map(r=>({e:r.e||'',l:r.l.trim()}));
+  var ans=settingsAns.filter(function(r){return r.l.trim();}).slice(0,4).map(function(r){return {e:r.e||'',l:r.l.trim()};});
   if(ans.length<2){showToast('Add at least 2 answers');return;}
   questions.push({id:'c'+Date.now(),cat:'Custom',enabled:true,q:qt,answers:ans});
   saveState();document.getElementById('settings-q-text').value='';
@@ -780,20 +751,19 @@ function addCustomQ(){
 }
 function openEmoji(e,rowId){
   e.stopPropagation();emojiTarget=rowId;
-  const popup=document.getElementById('emoji-popup');
-  popup.innerHTML=`<span class="ep-none" onclick="pickEmoji('${rowId}','')">None</span>`+EMOJIS.map(em=>`<span class="ep-emoji" onclick="pickEmoji('${rowId}','${em}')">${em}</span>`).join('');
-  const btn=document.getElementById(rowId+'-eb');const rect=btn.getBoundingClientRect();
+  var popup=document.getElementById('emoji-popup');
+  popup.innerHTML='<span class="ep-none" onclick="pickEmoji(\''+rowId+'\',\'\')">None</span>'+EMOJIS.map(function(em){return '<span class="ep-emoji" onclick="pickEmoji(\''+rowId+'\',\''+em+'\')">'+em+'</span>';}).join('');
+  var btn=document.getElementById(rowId+'-eb');var rect=btn.getBoundingClientRect();
   popup.style.top=(rect.bottom+6)+'px';popup.style.left=Math.max(8,rect.left-80)+'px';popup.classList.add('on');
 }
 function pickEmoji(rowId,emoji){
-  document.getElementById(rowId+'-ef').textContent=emoji||'＋';
-  const parts=rowId.split('-');const ctx=parts[0];const i=+parts[parts.length-1];
+  document.getElementById(rowId+'-ef').textContent=emoji||'\uff0b';
+  var parts=rowId.split('-');var ctx=parts[0];var i=+parts[parts.length-1];
   (ctx==='wiz'?wizAns:settingsAns)[i].e=emoji;closeEmojiPopup();
 }
 function closeEmojiPopup(){document.getElementById('emoji-popup').classList.remove('on');emojiTarget=null;}
-
 function startSession(catId){
-  sessionQ=catId==='all'?questions.filter(q=>q.enabled):questions.filter(q=>q.enabled&&q.cat===catId);
+  sessionQ=catId==='all'?questions.filter(function(q){return q.enabled;}):questions.filter(function(q){return q.enabled&&q.cat===catId;});
   if(!sessionQ.length){showToast('No questions enabled for this category');return;}
   sessionIdx=0;
   document.getElementById('sess-title').textContent=catId==='all'?'All Questions':catId;
@@ -805,30 +775,27 @@ function renderQ(){
   cancelDwell();currentQ=sessionQ[sessionIdx];
   if(!currentQ){endSession();return;}
   document.getElementById('sess-q').textContent=currentQ.q;
-  const dots=sessionQ.map((_,i)=>`<div class="pdot ${i<sessionIdx?'done':i===sessionIdx?'cur':''}"></div>`).join('');
-  document.getElementById('sess-prog').innerHTML=`<div class="prog-dots">${dots}</div><span class="prog-lbl">${sessionIdx+1} of ${sessionQ.length}</span>`;
+  var dots=sessionQ.map(function(_,i){return '<div class="pdot '+(i<sessionIdx?'done':i===sessionIdx?'cur':'')+'"></div>';}).join('');
+  document.getElementById('sess-prog').innerHTML='<div class="prog-dots">'+dots+'</div><span class="prog-lbl">'+(sessionIdx+1)+' of '+sessionQ.length+'</span>';
   renderQuads(currentQ.answers);resetBar();
 }
 function renderQuads(answers){
-  const grid=document.getElementById('quad-grid');
-  const pos=['tl','tr','bl','br'];
-  const labels=['Top left','Top right','Bottom left','Bottom right'];
-  let map={};
+  var grid=document.getElementById('quad-grid');
+  var pos=['tl','tr','bl','br'];
+  var labels=['Top left','Top right','Bottom left','Bottom right'];
+  var map={};
   if(answers.length===2){map={tl:answers[0],br:answers[1]};}
   else if(answers.length===3){map={tl:answers[0],tr:answers[1],bl:answers[2]};}
   else{map={tl:answers[0],tr:answers[1],bl:answers[2],br:answers[3]};}
-  grid.innerHTML=pos.map((p,i)=>{
-    const a=map[p];
-    if(!a)return `<div class="qtile ${p} empty"></div>`;
-    return `<div class="qtile ${p}" id="t-${p}"
-      onmouseenter="startDwell('${p}')" onmouseleave="cancelDwell()"
-      ontouchstart="startDwell('${p}')" ontouchend="cancelDwell()"
-      onclick="selectAns('${p}')">
-      <span class="zone-lbl">${labels[i]}</span>
-      ${a.e?`<div class="tile-emoji">${a.e}</div>`:''}
-      <div class="tile-label">${a.l}</div>
-      <svg class="dwell-ring" id="r-${p}" width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="35"/></svg>
-    </div>`;
+  grid.innerHTML=pos.map(function(p,i){
+    var a=map[p];
+    if(!a)return '<div class="qtile '+p+' empty"></div>';
+    return '<div class="qtile '+p+'" id="t-'+p+'" onmouseenter="startDwell(\''+p+'\')" onmouseleave="cancelDwell()" ontouchstart="startDwell(\''+p+'\')" ontouchend="cancelDwell()" onclick="selectAns(\''+p+'\')">'+
+      '<span class="zone-lbl">'+labels[i]+'</span>'+
+      (a.e?'<div class="tile-emoji">'+a.e+'</div>':'')+
+      '<div class="tile-label">'+a.l+'</div>'+
+      '<svg class="dwell-ring" id="r-'+p+'" width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="35"/></svg>'+
+      '</div>';
   }).join('');
 }
 function nextQ(){cancelDwell();sessionIdx<sessionQ.length-1?(sessionIdx++,renderQ()):endSession();}
@@ -837,39 +804,39 @@ function skipQ(){nextQ();}
 function endSession(){stopGaze();showHome();}
 function startDwell(pos){
   if(dwellTarget===pos)return;cancelDwell();dwellTarget=pos;
-  const tile=document.getElementById('t-'+pos);const ring=document.getElementById('r-'+pos);const bar=document.getElementById('dwell-bar');
+  var tile=document.getElementById('t-'+pos);var ring=document.getElementById('r-'+pos);var bar=document.getElementById('dwell-bar');
   if(!tile||!ring)return;
   tile.classList.add('dwelling');ring.classList.add('on');
-  const c=ring.querySelector('circle');
-  if(c){c.style.transition=`stroke-dashoffset ${dwellMs}ms linear`;c.style.strokeDashoffset='0';}
-  if(bar){bar.style.transition=`width ${dwellMs}ms linear`;bar.style.width='100%';}
-  dwellTimer=setTimeout(()=>selectAns(pos),dwellMs);
+  var c=ring.querySelector('circle');
+  if(c){c.style.transition='stroke-dashoffset '+dwellMs+'ms linear';c.style.strokeDashoffset='0';}
+  if(bar){bar.style.transition='width '+dwellMs+'ms linear';bar.style.width='100%';}
+  dwellTimer=setTimeout(function(){selectAns(pos);},dwellMs);
 }
 function cancelDwell(){
-  clearTimeout(dwellTimer);dwellTimer=null;const prev=dwellTarget;dwellTarget=null;if(!prev)return;
-  const tile=document.getElementById('t-'+prev);const ring=document.getElementById('r-'+prev);
+  clearTimeout(dwellTimer);dwellTimer=null;var prev=dwellTarget;dwellTarget=null;if(!prev)return;
+  var tile=document.getElementById('t-'+prev);var ring=document.getElementById('r-'+prev);
   if(tile)tile.classList.remove('dwelling');
-  if(ring){ring.classList.remove('on');const c=ring.querySelector('circle');if(c){c.style.transition='none';c.style.strokeDashoffset='220';}}
+  if(ring){ring.classList.remove('on');var c=ring.querySelector('circle');if(c){c.style.transition='none';c.style.strokeDashoffset='220';}}
   resetBar();
 }
-function resetBar(){const b=document.getElementById('dwell-bar');if(b){b.style.transition='none';b.style.width='0%';}}
+function resetBar(){var b=document.getElementById('dwell-bar');if(b){b.style.transition='none';b.style.width='0%';}}
 function selectAns(pos){
   cancelDwell();
-  const a=currentQ.answers;
-  let map=a.length===2?{tl:a[0],br:a[1]}:a.length===3?{tl:a[0],tr:a[1],bl:a[2]}:{tl:a[0],tr:a[1],bl:a[2],br:a[3]};
-  const ans=map[pos];if(!ans)return;
-  document.getElementById('fb-emoji').textContent=ans.e||'💬';
+  var a=currentQ.answers;
+  var map=a.length===2?{tl:a[0],br:a[1]}:a.length===3?{tl:a[0],tr:a[1],bl:a[2]}:{tl:a[0],tr:a[1],bl:a[2],br:a[3]};
+  var ans=map[pos];if(!ans)return;
+  document.getElementById('fb-emoji').textContent=ans.e||'\ud83d\udcac';
   document.getElementById('fb-label').textContent=ans.l;
   document.getElementById('fb-q').textContent=currentQ.q;
   show('s-feedback');
-  const entry={ts:new Date(),q:currentQ.q,e:ans.e,a:ans.l};
+  var entry={ts:new Date(),q:currentQ.q,e:ans.e,a:ans.l};
   sessionLog.unshift(entry);
-  if(db)db.from('communications').insert({created_at:entry.ts.toISOString(),category:currentQ.cat,question:entry.q,answer:entry.a}).catch(e=>console.warn(e));
+  if(db)db.from('communications').insert({created_at:entry.ts.toISOString(),category:currentQ.cat,question:entry.q,answer:entry.a}).catch(function(e){console.warn(e);});
 }
 function askAgain(){show('s-session');renderQ();}
 function nextAfterFb(){show('s-session');nextQ();}
-function speakQ(){if('speechSynthesis'in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(currentQ?.q||'');u.rate=0.9;window.speechSynthesis.speak(u);}}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+function speakQ(){if('speechSynthesis'in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(currentQ&&currentQ.q?currentQ.q:'');u.rate=0.9;window.speechSynthesis.speak(u);}}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2400);}
 </script>
 </body>
 </html>
