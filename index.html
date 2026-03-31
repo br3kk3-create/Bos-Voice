@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Bo's Voice">
 <meta name="theme-color" content="#0f0f1a">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- WebGazer loaded dynamically only when needed — never in <head> -->
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -71,6 +72,7 @@ input[type=text]:focus{outline:none;border-color:var(--teal);}
 .cat-toggle-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s;}
 .cat-toggle-item.on .cat-toggle-check{background:var(--teal);border-color:var(--teal);color:#fff;}
 #s-calibrate{background:#000;}
+.cal-storage-warning{display:none;position:absolute;top:0;left:0;right:0;z-index:30;background:var(--red);color:#fff;font-size:13px;font-weight:600;text-align:center;padding:12px 16px;line-height:1.5;}
 .cal-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:10;}
 .cal-instruction{font-size:18px;font-weight:700;color:#fff;text-align:center;padding:0 24px;line-height:1.4;}
 .cal-sub{font-size:13px;color:rgba(255,255,255,0.5);text-align:center;padding:0 32px;}
@@ -286,7 +288,7 @@ input[type=text]:focus{outline:none;border-color:var(--teal);}
   <div class="wizard-step" id="wstep-4">
     <div class="wiz-emoji">&#x1F389;</div>
     <div class="wiz-title">All set!</div>
-    <div class="wiz-sub">Now let's calibrate the eye tracker. This takes about 30 seconds and only needs to be done once.</div>
+    <div class="wiz-sub">Now let's calibrate the eye tracker. This takes about 30 seconds and only needs to be done once per device.</div>
     <div style="flex:1"></div>
   </div>
   <div class="wiz-footer">
@@ -296,6 +298,10 @@ input[type=text]:focus{outline:none;border-color:var(--teal);}
 </div>
 
 <div class="screen" id="s-calibrate">
+  <div class="cal-storage-warning" id="cal-storage-warning">
+    &#x26A0;&#xFE0F; Your browser is blocking storage access — calibration data won't be saved between sessions.
+    To fix: click the lock icon in your address bar and allow storage for this site, then recalibrate.
+  </div>
   <div class="cal-overlay" id="cal-overlay">
     <div class="cal-instruction" id="cal-instruction">Position the device so the face is clearly visible, then tap Start.</div>
     <div class="cal-sub" id="cal-sub">Good front lighting gives the best accuracy.</div>
@@ -436,7 +442,7 @@ const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const BUILTIN = [
   {id:'yn1',cat:'Yes/No',  enabled:true, q:'Are you comfortable right now?',      answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
   {id:'yn2',cat:'Yes/No',  enabled:true, q:'Are you in any pain?',                answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
-  {id:'yn3',cat:'Yes/No',  enabled:true, q:'Are you tired right now?',             answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
+  {id:'yn3',cat:'Yes/No',  enabled:true, q:'Are you tired right now?',            answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
   {id:'yn4',cat:'Yes/No',  enabled:true, q:'Are you hungry?',                     answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
   {id:'yn5',cat:'Yes/No',  enabled:true, q:'Are you thirsty?',                    answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
   {id:'yn6',cat:'Yes/No',  enabled:false,q:'Do you want the TV on?',              answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'No'}]},
@@ -453,19 +459,20 @@ const BUILTIN = [
   {id:'p1', cat:'People',  enabled:false,q:'Who would you like to see?',          answers:[{e:'\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc66',l:'Family'},{e:'\ud83d\udc6b',l:'Friends'},{e:'\ud83d\udc68\u200d\u2695\ufe0f',l:'Doctor'},{e:'\ud83e\uddd8',l:'Nobody now'}]},
   {id:'p2', cat:'People',  enabled:false,q:'Do you want someone to stay?',        answers:[{e:'\u2705',l:'Please stay'},{e:'\u274c',l:"I'm okay alone"}]},
   {id:'t1', cat:'Therapy', enabled:false,q:'How did therapy feel today?',         answers:[{e:'\ud83d\udcaa',l:'Good'},{e:'\ud83d\ude10',l:'Okay'},{e:'\ud83d\ude13',l:'Too hard'},{e:'\ud83d\ude34',l:'Too tired'}]},
-  {id:'t2', cat:'Therapy', enabled:false,q:'Do you want to do exercises now?',   answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'Not now'},{e:'\u23f0',l:'Later'}]},
+  {id:'t2', cat:'Therapy', enabled:false,q:'Do you want to do exercises now?',    answers:[{e:'\u2705',l:'Yes'},{e:'\u274c',l:'Not now'},{e:'\u23f0',l:'Later'}]},
 ];
 const EMOJIS=['\u2705','\u274c','\ud83d\ude0a','\ud83d\ude10','\ud83d\ude14','\ud83d\ude23','\ud83d\ude16','\ud83d\ude04','\ud83d\ude24','\ud83d\ude34','\u26a1','\ud83d\udca7','\ud83c\udf7d','\ud83c\udfe5','\ud83d\udd25','\u2744\ufe0f','\ud83d\udc4d','\ud83e\udd32','\ud83c\udfb5','\ud83e\udd2b','\ud83d\udcfa','\ud83d\udc65','\ud83d\udc68\u200d\u2695\ufe0f','\ud83d\udcaa','\u23f0','\ud83e\udd14','\ud83d\udc4b','\u2764\ufe0f','\ud83d\ude4f','\ud83d\udc8a','\ud83d\udecc'];
 const CAT_ICONS={'Yes/No':'\u2705','Feelings':'\ud83d\udcd9','Needs':'\ud83d\ude4b','People':'\ud83d\udc65','Therapy':'\ud83d\udcaa','Custom':'\u270f\ufe0f'};
 const CAL_POINTS=[{x:.08,y:.08},{x:.92,y:.08},{x:.08,y:.92},{x:.92,y:.92},{x:.5,y:.08},{x:.5,y:.92},{x:.08,y:.5},{x:.92,y:.5},{x:.5,y:.5}];
 
-let db=null,dwellMs=2500,questions=[],sessionQ=[],sessionIdx=0,sessionLog=[];
-let dwellTarget=null,dwellTimer=null;
-let wizStep=0,wizCatOn={},wizAns=[],settingsAns=[],currentQ=null,emojiTarget=null;
-let calPointIdx=0,calClicksPerPoint=3,calClicks=0,calActive=false;
-let gazeActive=false,gazeCalibrated=false,calTimestamp=null;
-let lastGazeX=0,lastGazeY=0,gazeSmooth=0.15;
-let dragI=null;
+var db=null,dwellMs=2500,questions=[],sessionQ=[],sessionIdx=0,sessionLog=[];
+var dwellTarget=null,dwellTimer=null;
+var wizStep=0,wizCatOn={},wizAns=[],settingsAns=[],currentQ=null,emojiTarget=null;
+var calPointIdx=0,calClicksPerPoint=3,calClicks=0,calActive=false;
+var gazeActive=false,gazeCalibrated=false,calTimestamp=null;
+var lastGazeX=0,lastGazeY=0,gazeSmooth=0.15;
+var dragI=null;
+var webgazerReady=false;
 
 window.addEventListener('DOMContentLoaded',function(){
   if(SUPABASE_URL){try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
@@ -479,6 +486,7 @@ function routeAfterLogin(){
   if(!localStorage.getItem('bv_setup_done')){startWizard();}
   else{showHome();}
 }
+
 function loadState(){
   var s=localStorage.getItem('bv_questions');
   questions=s?JSON.parse(s):BUILTIN.map(function(q){return Object.assign({},q);});
@@ -487,29 +495,56 @@ function loadState(){
   var calTs=localStorage.getItem('bv_cal_ts');
   if(calTs){gazeCalibrated=true;calTimestamp=new Date(+calTs);}
   updateDwellUI();
+  // Pre-initialize WebGazer in background if previously calibrated
   if(gazeCalibrated){initWebGazer();}
 }
-  function initWebGazer(){
+
+function initWebGazer(){
+  if(document.querySelector('script[data-webgazer]'))return; // already loading
   var script=document.createElement('script');
   script.src='https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js';
+  script.setAttribute('data-webgazer','1');
   script.onload=function(){
     try{
-      webgazer.setRegression('ridge').setTracker('TFFacemesh').saveDataAcrossSessions(false).setGazeListener(onGaze).showVideoPreview(false).showPredictionPoints(false);
+      webgazer
+        .setRegression('ridge')
+        .setTracker('TFFacemesh')
+        .saveDataAcrossSessions(true)
+        .setGazeListener(onGaze)
+        .showVideoPreview(false)
+        .showPredictionPoints(false);
       webgazer.params.showFaceOverlay=false;
       webgazer.params.showFaceFeedbackBox=false;
       webgazer.begin().then(function(){
-        document.querySelectorAll('[id^="webgazer"]').forEach(function(el){el.style.display='none';el.style.visibility='hidden';});
-        webgazer.pause();
-        console.log('WebGazer pre-initialized, ready to resume');
+        document.querySelectorAll('[id^="webgazer"]').forEach(function(el){
+          el.style.display='none';
+          el.style.visibility='hidden';
+        });
+        webgazer.pause(); // stay paused until user activates gaze pill
+        webgazerReady=true;
+        console.log('WebGazer pre-initialized and paused, ready to resume');
       }).catch(function(e){console.warn('WebGazer pre-init error:',e);});
     }catch(e){console.warn('WebGazer pre-init setup error:',e);}
   };
+  script.onerror=function(){console.warn('WebGazer script failed to load');};
   document.head.appendChild(script);
 }
+
+function checkStorageAccess(){
+  try{
+    localStorage.setItem('bv_storage_test','1');
+    localStorage.removeItem('bv_storage_test');
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
 function saveState(){
   localStorage.setItem('bv_questions',JSON.stringify(questions));
   localStorage.setItem('bv_dwell',dwellMs);
 }
+
 function doLogin(){
   var pw=document.getElementById('login-pw').value.trim();
   if(pw===TEAM_PASSWORD){sessionStorage.setItem('bv_auth','ok');loadState();routeAfterLogin();}
@@ -531,6 +566,7 @@ function updateCalStatusUI(){
   if(val&&calTimestamp){val.classList.add('calibrated');val.textContent='Last calibrated '+calTimestamp.toLocaleDateString();}
   else if(val){val.classList.remove('calibrated');val.textContent='';}
 }
+
 function startWizard(){
   wizStep=0;
   var cats=[];
@@ -542,7 +578,7 @@ function startWizard(){
     return '<div class="cat-toggle-item on" id="wct-'+c+'" onclick="toggleWizCat(\''+c+'\')">'+
       '<span class="cat-toggle-icon">'+(CAT_ICONS[c]||'?')+'</span>'+
       '<div class="cat-toggle-text"><div class="cat-toggle-name">'+c+'</div><div class="cat-toggle-count">'+n+' questions</div></div>'+
-      '<div class="cat-toggle-check" id="wcc-'+c+'">&#x2713;</div></div>';
+      '<div class="cat-toggle-check" id="wcc-'+c+'">\u2713</div></div>';
   }).join('');
   renderWizProg();show('s-wizard');
 }
@@ -553,7 +589,9 @@ function toggleWizCat(c){
   if(wizStep===2)document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(function(v){return v;});
 }
 function renderWizProg(){
-  document.getElementById('wiz-progress').innerHTML=Array.from({length:5},function(_,i){return '<div class="wp-dot '+(i<wizStep?'done':i===wizStep?'cur':'')+'"></div>';}).join('');
+  document.getElementById('wiz-progress').innerHTML=Array.from({length:5},function(_,i){
+    return '<div class="wp-dot '+(i<wizStep?'done':i===wizStep?'cur':'')+'"></div>';
+  }).join('');
   document.getElementById('wiz-back-btn').style.display=wizStep>0?'block':'none';
   document.getElementById('wiz-next-btn').innerHTML=wizStep===4?'Calibrate eye tracker &#x2192;':'Next &#x2192;';
   if(wizStep===2)document.getElementById('wiz-next-btn').disabled=!Object.values(wizCatOn).some(function(v){return v;});
@@ -578,10 +616,11 @@ function wizBack(){
   renderWizProg();
 }
 
-/* startCalibration is fully synchronous — camera started via .then() so nothing can interrupt the screen render */
+/* startCalibration is fully synchronous — camera via .then() so nothing interrupts screen render */
 function startCalibration(fromWizard){
-  calActive=false;calPointIdx=0;calClicks=0;
+  calActive=false;calPointIdx=0;calClicks=0;webgazerReady=false;
   show('s-calibrate');
+  document.getElementById('cal-storage-warning').style.display='none';
   document.getElementById('cal-instruction').textContent='Position the device so the face is clearly visible, then tap Start.';
   document.getElementById('cal-sub').textContent='Good front lighting gives the best accuracy.';
   document.getElementById('cal-action-btn').textContent='Start calibration';
@@ -594,26 +633,44 @@ function startCalibration(fromWizard){
       .catch(function(){document.getElementById('cal-sub').textContent='Camera access denied. You can still use touch-only mode.';});
   }
 }
+
 function renderCalDots(currentIdx){
-  document.getElementById('cal-prog-dots').innerHTML=CAL_POINTS.map(function(_,i){return '<div class="cal-prog-dot '+(i<currentIdx?'done':i===currentIdx?'cur':'')+'"></div>';}).join('');
+  document.getElementById('cal-prog-dots').innerHTML=CAL_POINTS.map(function(_,i){
+    return '<div class="cal-prog-dot '+(i<currentIdx?'done':i===currentIdx?'cur':'')+'"></div>';
+  }).join('');
 }
+
 function calAction(){
   if(calActive)return;
   calActive=true;calPointIdx=0;
   document.getElementById('cal-overlay').style.pointerEvents='none';
   document.getElementById('cal-overlay').style.opacity='0';
 
-  // Load WebGazer dynamically only when user clicks Start
+  // Remove any previously loaded WebGazer script so we get a clean init
+  var old=document.querySelector('script[data-webgazer]');
+  if(old)old.remove();
+
   var script=document.createElement('script');
   script.src='https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js';
+  script.setAttribute('data-webgazer','1');
   script.onload=function(){
     try{
-      webgazer.setRegression('ridge').setTracker('TFFacemesh').saveDataAcrossSessions(false).setGazeListener(onGaze).showVideoPreview(false).showPredictionPoints(false);
+      webgazer
+        .setRegression('ridge')
+        .setTracker('TFFacemesh')
+        .saveDataAcrossSessions(true)
+        .setGazeListener(onGaze)
+        .showVideoPreview(false)
+        .showPredictionPoints(false);
       webgazer.params.showFaceOverlay=false;
       webgazer.params.showFaceFeedbackBox=false;
       webgazer.begin().then(function(){
-        document.querySelectorAll('[id^="webgazer"]').forEach(function(el){el.style.display='none';el.style.visibility='hidden';});
-        console.log('WebGazer ready');
+        document.querySelectorAll('[id^="webgazer"]').forEach(function(el){
+          el.style.display='none';
+          el.style.visibility='hidden';
+        });
+        webgazerReady=true;
+        console.log('WebGazer ready for calibration');
       }).catch(function(e){console.warn('WebGazer error:',e);});
     }catch(e){console.warn('WebGazer setup error:',e);}
   };
@@ -622,6 +679,7 @@ function calAction(){
 
   showCalTarget(0);
 }
+
 function showCalTarget(idx){
   if(idx>=CAL_POINTS.length){finishCalibration();return;}
   calPointIdx=idx;calClicks=0;
@@ -635,8 +693,14 @@ function showCalTarget(idx){
 }
 function onCalTargetClick(){
   calClicks++;
-  if(window.webgazer){var pt=CAL_POINTS[calPointIdx];webgazer.recordScreenPosition(pt.x*window.innerWidth,pt.y*window.innerHeight,'click');}
-  if(calClicks>=calClicksPerPoint){document.getElementById('cal-target').classList.remove('on');setTimeout(function(){showCalTarget(calPointIdx+1);},300);}
+  if(window.webgazer&&webgazerReady){
+    var pt=CAL_POINTS[calPointIdx];
+    webgazer.recordScreenPosition(pt.x*window.innerWidth,pt.y*window.innerHeight,'click');
+  }
+  if(calClicks>=calClicksPerPoint){
+    document.getElementById('cal-target').classList.remove('on');
+    setTimeout(function(){showCalTarget(calPointIdx+1);},300);
+  }
 }
 function finishCalibration(){
   calActive=false;gazeCalibrated=true;calTimestamp=new Date();
@@ -651,6 +715,10 @@ function finishCalibration(){
   document.getElementById('cal-action-btn').onclick=function(){showHome();};
   document.getElementById('cal-target').classList.remove('on');
   updateCalStatusUI();
+  // Show storage warning if browser is blocking localStorage
+  if(!checkStorageAccess()){
+    document.getElementById('cal-storage-warning').style.display='block';
+  }
   var vid=document.getElementById('cal-cam-preview');
   if(vid.srcObject){vid.srcObject.getTracks().forEach(function(t){t.stop();});vid.srcObject=null;}
 }
@@ -660,6 +728,7 @@ function skipCalibration(){
   if(vid.srcObject){vid.srcObject.getTracks().forEach(function(t){t.stop();});vid.srcObject=null;}
   showHome();
 }
+
 function onGaze(data,elapsedTime){
   if(!data||!gazeActive)return;
   lastGazeX=lastGazeX+(data.x-lastGazeX)*gazeSmooth;
@@ -685,16 +754,20 @@ function mapGazeToQuadrant(x,y){
     if(pos!==dwellTarget){cancelDwell();startDwell(pos);}
   }else{cancelDwell();}
 }
+
 function startGaze(){
   if(!gazeCalibrated){showToast('Calibrate first \u2014 go to Settings');return;}
-  if(!window.webgazer)return;
+  if(!window.webgazer){showToast('Eye tracker not ready yet \u2014 try again in a moment');return;}
   webgazer.resume().then(function(){
     webgazer.showPredictionPoints(false);
     gazeActive=true;
     document.getElementById('gaze-dot').style.display='block';
     document.getElementById('gaze-pill').classList.add('active');
     document.getElementById('gaze-pill-txt').textContent='Tracking';
-  }).catch(function(){showToast('Eye tracker error \u2014 try recalibrating');});
+  }).catch(function(e){
+    console.warn('resume error:',e);
+    showToast('Eye tracker error \u2014 try recalibrating');
+  });
 }
 function stopGaze(){
   gazeActive=false;
@@ -705,14 +778,19 @@ function stopGaze(){
   cancelDwell();
 }
 function toggleGaze(){gazeActive?stopGaze():startGaze();}
+
 function renderHome(){
   updateDwellUI();updateCalStatusUI();
   var enabled=questions.filter(function(q){return q.enabled;});
   var cats=[];enabled.forEach(function(q){if(cats.indexOf(q.cat)===-1)cats.push(q.cat);});
   var el=document.getElementById('home-actions');
   if(!enabled.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">No questions enabled \u2014 go to Settings.</div>';return;}
-  var items=[{id:'all',name:'All Questions',icon:'&#x25B6;&#xFE0F;',n:enabled.length}].concat(cats.map(function(c){return {id:c,name:c,icon:CAT_ICONS[c]||'?',n:enabled.filter(function(q){return q.cat===c;}).length};}));
-  el.innerHTML='<div class="action-grid">'+items.map(function(it){return '<div class="action-card" onclick="startSession(\''+it.id+'\')"><div class="action-icon">'+it.icon+'</div><div class="action-name">'+it.name+'</div><div class="action-sub">'+it.n+' question'+(it.n!==1?'s':'')+'</div></div>';}).join('')+'</div>';
+  var items=[{id:'all',name:'All Questions',icon:'&#x25B6;&#xFE0F;',n:enabled.length}].concat(cats.map(function(c){
+    return {id:c,name:c,icon:CAT_ICONS[c]||'?',n:enabled.filter(function(q){return q.cat===c;}).length};
+  }));
+  el.innerHTML='<div class="action-grid">'+items.map(function(it){
+    return '<div class="action-card" onclick="startSession(\''+it.id+'\')"><div class="action-icon">'+it.icon+'</div><div class="action-name">'+it.name+'</div><div class="action-sub">'+it.n+' question'+(it.n!==1?'s':'')+'</div></div>';
+  }).join('')+'</div>';
   var log=document.getElementById('home-log');
   if(!sessionLog.length){log.innerHTML='<div class="log-empty">No responses yet today</div>';return;}
   log.innerHTML=sessionLog.slice(0,14).map(function(e){
@@ -776,7 +854,8 @@ function addCustomQ(){
 function openEmoji(e,rowId){
   e.stopPropagation();emojiTarget=rowId;
   var popup=document.getElementById('emoji-popup');
-  popup.innerHTML='<span class="ep-none" onclick="pickEmoji(\''+rowId+'\',\'\')">None</span>'+EMOJIS.map(function(em){return '<span class="ep-emoji" onclick="pickEmoji(\''+rowId+'\',\''+em+'\')">'+em+'</span>';}).join('');
+  popup.innerHTML='<span class="ep-none" onclick="pickEmoji(\''+rowId+'\',\'\')">None</span>'+
+    EMOJIS.map(function(em){return '<span class="ep-emoji" onclick="pickEmoji(\''+rowId+'\',\''+em+'\')">'+em+'</span>';}).join('');
   var btn=document.getElementById(rowId+'-eb');var rect=btn.getBoundingClientRect();
   popup.style.top=(rect.bottom+6)+'px';popup.style.left=Math.max(8,rect.left-80)+'px';popup.classList.add('on');
 }
@@ -786,13 +865,15 @@ function pickEmoji(rowId,emoji){
   (ctx==='wiz'?wizAns:settingsAns)[i].e=emoji;closeEmojiPopup();
 }
 function closeEmojiPopup(){document.getElementById('emoji-popup').classList.remove('on');emojiTarget=null;}
+
 function startSession(catId){
   sessionQ=catId==='all'?questions.filter(function(q){return q.enabled;}):questions.filter(function(q){return q.enabled&&q.cat===catId;});
   if(!sessionQ.length){showToast('No questions enabled for this category');return;}
   sessionIdx=0;
   document.getElementById('sess-title').textContent=catId==='all'?'All Questions':catId;
   show('s-session');
-  if(gazeCalibrated){setTimeout(startGaze,500);}
+  // Auto-start gaze after 2 seconds to give WebGazer time to be ready
+  if(gazeCalibrated){setTimeout(startGaze,2000);}
   renderQ();
 }
 function renderQ(){
