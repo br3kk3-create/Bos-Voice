@@ -487,6 +487,24 @@ function loadState(){
   var calTs=localStorage.getItem('bv_cal_ts');
   if(calTs){gazeCalibrated=true;calTimestamp=new Date(+calTs);}
   updateDwellUI();
+  if(gazeCalibrated){initWebGazer();}
+}
+  function initWebGazer(){
+  var script=document.createElement('script');
+  script.src='https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js';
+  script.onload=function(){
+    try{
+      webgazer.setRegression('ridge').setTracker('TFFacemesh').saveDataAcrossSessions(false).setGazeListener(onGaze).showVideoPreview(false).showPredictionPoints(false);
+      webgazer.params.showFaceOverlay=false;
+      webgazer.params.showFaceFeedbackBox=false;
+      webgazer.begin().then(function(){
+        document.querySelectorAll('[id^="webgazer"]').forEach(function(el){el.style.display='none';el.style.visibility='hidden';});
+        webgazer.pause();
+        console.log('WebGazer pre-initialized, ready to resume');
+      }).catch(function(e){console.warn('WebGazer pre-init error:',e);});
+    }catch(e){console.warn('WebGazer pre-init setup error:',e);}
+  };
+  document.head.appendChild(script);
 }
 function saveState(){
   localStorage.setItem('bv_questions',JSON.stringify(questions));
