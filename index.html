@@ -473,9 +473,46 @@ var gazeActive=false,gazeCalibrated=false,calTimestamp=null;
 var lastGazeX=0,lastGazeY=0,gazeSmooth=0.15;
 var dragI=null;
 var webgazerReady=false;
+var tobiiConnected=false;
+var tobiiWS=null;
+
+function initTobiiBridge(){
+  try{
+    tobiiWS=new WebSocket('ws://localhost:8765');
+    tobiiWS.onopen=function(){
+      tobiiConnected=true;
+      console.log('Tobii bridge connected');
+      showToast('Tobii eye tracker connected');
+      var pill=document.getElementById('gaze-pill-txt');
+      if(pill)pill.textContent='Tobii active';
+    };
+    tobiiWS.onmessage=function(event){
+      if(!gazeActive)return;
+      try{
+        var d=JSON.parse(event.data);
+        // Convert normalized 0-1 coords to screen pixels
+        var screenX=d.x*window.innerWidth;
+        var screenY=d.y*window.innerHeight;
+        onGaze({x:screenX,y:screenY},0);
+      }catch(e){}
+    };
+    tobiiWS.onclose=function(){
+      tobiiConnected=false;
+      console.log('Tobii bridge disconnected — falling back to WebGazer');
+      // Retry connection every 3 seconds
+      setTimeout(initTobiiBridge,3000);
+    };
+    tobiiWS.onerror=function(){
+      tobiiConnected=false;
+    };
+  }catch(e){
+    console.warn('Tobii bridge unavailable:',e);
+  }
+}
 
 window.addEventListener('DOMContentLoaded',function(){
   if(SUPABASE_URL){try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
+    initTobiiBridge();
   if(sessionStorage.getItem('bv_auth')==='ok'){loadState();routeAfterLogin();}
   initAnsRows('wiz',2);initAnsRows('settings',2);
   document.getElementById('emoji-popup').addEventListener('click',function(e){e.stopPropagation();});
